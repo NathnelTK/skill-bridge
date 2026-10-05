@@ -1,0 +1,74 @@
+<div class="cv-upload-container">
+  <div class="upload-card">
+    <h2>Upload Your CV</h2>
+    <p class="subtitle">Upload your CV as a PDF. We'll extract your skills and add them to your profile automatically.</p>
+
+    <div class="upload-area" [class.drag-over]="false">
+      <input
+        type="file"
+        id="cv-file"
+        accept=".pdf,application/pdf"
+        (change)="onFileSelected($event)"
+        [disabled]="isUploading"
+      />
+      <label for="cv-file" class="upload-label">
+        <div class="upload-icon">📄</div>
+        <div class="upload-text">
+          <span *ngIf="!selectedFile">Click to select or drag and drop your CV</span>
+          <span *ngIf="selectedFile" class="selected-file">{{ selectedFile.name }}</span>
+        </div>
+        <div class="upload-hint">PDF files only, max 8MB</div>
+      </label>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="upload-actions" *ngIf="selectedFile">
+      <button
+        class="btn-upload"
+        (click)="onUpload()"
+        [disabled]="isUploading"
+      >
+        {{ isUploading ? 'Processing...' : 'Upload CV' }}
+      </button>
+      <button
+        class="btn-cancel"
+        (click)="onCancel()"
+        [disabled]="isUploading"
+      >
+        Cancel
+      </button>
+    </div>
+
+    <div class="upload-result" *ngIf="uploadResult">
+      <div class="result-success">
+        <h3>✓ CV Uploaded Successfully</h3>
+        <p>Extracted {{ uploadResult.extractedCharacterCount }} characters from your CV.</p>
+
+        <div class="skills-section" *ngIf="uploadResult.addedSkills.length > 0">
+          <h4>New Skills Added:</h4>
+          <div class="skills-list">
+            <span class="skill-tag" *ngFor="let skill of uploadResult.addedSkills">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+
+        <div class="skills-section" *ngIf="uploadResult.alreadyPresentSkills.length > 0">
+          <h4>Skills Already in Profile:</h4>
+          <div class="skills-list">
+            <span class="skill-tag existing" *ngFor="let skill of uploadResult.alreadyPresentSkills">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+
+        <div class="skills-section" *ngIf="uploadResult.addedSkills.length === 0 && uploadResult.alreadyPresentSkills.length === 0">
+          <p>No skills were detected in your CV. Try adding skills manually to your profile.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

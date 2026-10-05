@@ -7,7 +7,9 @@ namespace TB.Application.Candidates;
 
 public sealed class CandidateProfileService(
     IUserRepository users,
-    ISkillRepository skills) : ICandidateProfileService
+    ISkillRepository skills,
+    IPdfTextExtractor pdfTextExtractor,
+    ISkillExtractor skillExtractor) : ICandidateProfileService
 {
     public async Task<CandidateProfileDto> GetCurrentAsync(Guid userId, CancellationToken ct)
     {
@@ -37,6 +39,65 @@ public sealed class CandidateProfileService(
         await users.UpdateWithSkillsAsync(user, skillIds, ct);
 
         return await GetCurrentAsync(userId, ct);
+    }
+
+    public async Task<CvUploadResultDto> ImportCvAsync(
+        Guid userId,
+        Stream pdfStream,
+        CancellationToken ct)
+    {
+        var user = await users.GetByIdWithSkillsAsync(userId, ct)
+            ?? throw new NotFoundException("The current user no longer exists.");
+
+        string cvText;
+        try
+        {
+            cvText = pdfTextExtractor.ExtractText(pdfStream);
+        }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            throw new ValidationException(
+                "The uploaded file could not be read as a PDF. Please upload a valid PDF CV.");
+        }
+
+        if (string.IsNullOrWhiteSpace(cvText))
+        {
+            throw new ValidationException(
+                "No text could be extracted from the PDF. Scanned or image-only CVs are not supported.");
+        }
+
+        var knownSkills = await skills.ListAsync(ct);
+        var detected = skillExtractor.ExtractSkills(cvText, knownSkills);
+
+        var existingSkillIds = user.CandidateSkills
+            .Select(candidateSkill => candidateSkill.SkillId)
+            .ToHashSet();
+
+        var added = detected
+            .Where(skill => !existingSkillIds.Contains(skill.Id))
+            .ToList();
+
+        var mergedSkillIds = existingSkillIds
+            .Concat(added.Select(skill => skill.Id))
+            .Distinct()
+            .ToList();
+
+        if (added.Count > 0)
+        {
+            await users.UpdateWithSkillsAsync(user, mergedSkillIds, ct);
+        }
+
+        return new CvUploadResultDto
+        {
+            AddedSkills = added.Select(skill => skill.Name).OrderBy(name => name).ToList(),
+            AlreadyPresentSkills = detected
+                .Where(skill => existingSkillIds.Contains(skill.Id))
+                .Select(skill => skill.Name)
+                .OrderBy(name => name)
+                .ToList(),
+            ExtractedCharacterCount = cvText.Length,
+            Profile = await GetCurrentAsync(userId, ct)
+        };
     }
 
     private static CandidateProfileDto ToDto(User user) => new()

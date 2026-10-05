@@ -5,35 +5,62 @@
       <p>As a candidate, you can find and apply for jobs, track your applications and build your career.</p>
     </div>
 
-    <form class="register-form">
+    <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <label>
         <span>Full Name</span>
-        <input type="text" placeholder="Enter your full name" />
+        <input type="text" formControlName="fullName" placeholder="Enter your full name" />
+        <span class="error" *ngIf="registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid">
+          Full name is required (min 2 characters)
+        </span>
       </label>
 
       <label>
         <span>Email</span>
-        <input type="email" placeholder="you@example.com" />
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+        <span class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+          Valid email is required
+        </span>
       </label>
 
       <label>
         <span>Password</span>
         <div class="password-wrap">
-          <input type="password" placeholder="Create a password" />
+          <input type="password" formControlName="password" placeholder="Create a password" />
           <span class="eye">◉</span>
         </div>
+        <span class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+          Password must be at least 6 characters
+        </span>
       </label>
 
       <label>
         <span>Confirm Password</span>
         <div class="password-wrap">
-          <input type="password" placeholder="Confirm your password" />
+          <input type="password" formControlName="confirmPassword" placeholder="Confirm your password" />
           <span class="eye">◉</span>
         </div>
+        <span class="error" *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched">
+          Passwords do not match
+        </span>
       </label>
 
-      <button type="submit" class="primary-btn">Sign Up</button>
+      <label>
+        <span>Location (Optional)</span>
+        <input type="text" formControlName="location" placeholder="Your location" />
+      </label>
+
+      <button type="submit" class="primary-btn" [disabled]="isLoading">
+        {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+      </button>
     </form>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
 
     <p class="signin-text">Already have an account? <a routerLink="/login">Login</a></p>
   </div>

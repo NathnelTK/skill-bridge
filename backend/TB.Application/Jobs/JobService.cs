@@ -11,9 +11,11 @@ public sealed class JobService(
     ISkillRepository skills,
     IApplicationRepository applications) : IJobService
 {
-    public async Task<IReadOnlyList<JobSummaryDto>> BrowseAsync(Guid? requiredSkillId, CancellationToken ct)
+    public async Task<IReadOnlyList<JobSummaryDto>> BrowseAsync(
+        IReadOnlyCollection<Guid> requiredSkillIds,
+        CancellationToken ct)
     {
-        var list = await jobs.ListAsync(requiredSkillId, ct);
+        var list = await jobs.ListAsync(requiredSkillIds, ct);
         return list.Select(ToSummary).ToList();
     }
 

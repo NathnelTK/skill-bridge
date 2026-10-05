@@ -16,10 +16,10 @@ public sealed class JobsController(
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<JobSummaryDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<JobSummaryDto>>> Browse(
-        [FromQuery] Guid? skillId,
+        [FromQuery] Guid[]? skillId,
         CancellationToken ct)
     {
-        var jobs = await jobService.BrowseAsync(skillId, ct);
+        var jobs = await jobService.BrowseAsync(skillId ?? [], ct);
         return Ok(jobs);
     }
 

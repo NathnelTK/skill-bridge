@@ -11,6 +11,7 @@ using TB.Application.Candidates;
 using TB.Application.Jobs;
 using TB.Application.Skills;
 using TB.Infrastructure.Auth;
+using TB.Infrastructure.Cv;
 using TB.Infrastructure.Persistence;
 using TB.Infrastructure.Persistence.Repositories;
 
@@ -42,6 +43,8 @@ public static class DependencyInjection
         services.AddSingleton(jwtOptions);
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IPdfTextExtractor, PdfTextExtractor>();
+        services.AddSingleton<ISkillExtractor, SkillNameExtractor>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISkillRepository, SkillRepository>();
         services.AddScoped<IJobRepository, JobRepository>();

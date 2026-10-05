@@ -8,7 +8,9 @@ public interface IJobRepository
 
     Task<Job?> GetByIdWithSkillsAsync(Guid id, CancellationToken ct);
 
-    Task<IReadOnlyList<Job>> ListAsync(Guid? requiredSkillId, CancellationToken ct);
+    Task<IReadOnlyList<Job>> ListAsync(
+        IReadOnlyCollection<Guid> requiredSkillIds,
+        CancellationToken ct);
 
     Task<IReadOnlyList<Job>> ListForEmployerAsync(Guid employerId, CancellationToken ct);
 

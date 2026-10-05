@@ -47,4 +47,41 @@ public sealed class CandidatesController(
         var applications = await applicationService.ListForCurrentCandidateAsync(User.GetUserId(), ct);
         return Ok(applications);
     }
+
+    [HttpPost("cv")]
+    [RequestSizeLimit(8 * 1024 * 1024)]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(typeof(CvUploadResultDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CvUploadResultDto>> UploadCv(
+        IFormFile file,
+        CancellationToken ct)
+    {
+        if (file is null || file.Length == 0)
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Bad Request",
+                Detail = "A non-empty PDF file is required."
+            });
+        }
+
+        if (!string.Equals(file.ContentType, "application/pdf", StringComparison.OrdinalIgnoreCase)
+            && !file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Bad Request",
+                Detail = "Only PDF files are supported."
+            });
+        }
+
+        await using var stream = file.OpenReadStream();
+        var result = await candidateProfileService.ImportCvAsync(User.GetUserId(), stream, ct);
+        return Ok(result);
+    }
 }

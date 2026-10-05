@@ -4,7 +4,9 @@ namespace TB.Application.Abstractions;
 
 public interface IJobService
 {
-    Task<IReadOnlyList<JobSummaryDto>> BrowseAsync(Guid? requiredSkillId, CancellationToken ct);
+    Task<IReadOnlyList<JobSummaryDto>> BrowseAsync(
+        IReadOnlyCollection<Guid> requiredSkillIds,
+        CancellationToken ct);
 
     Task<JobDto> GetAsync(Guid jobId, CancellationToken ct);
 

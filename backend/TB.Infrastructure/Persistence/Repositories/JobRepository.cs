@@ -17,7 +17,9 @@ public sealed class JobRepository(AppDbContext context) : IJobRepository
             .ThenInclude(jobSkill => jobSkill.Skill)
             .FirstOrDefaultAsync(job => job.Id == id, ct);
 
-    public async Task<IReadOnlyList<Job>> ListAsync(Guid? requiredSkillId, CancellationToken ct)
+    public async Task<IReadOnlyList<Job>> ListAsync(
+        IReadOnlyCollection<Guid> requiredSkillIds,
+        CancellationToken ct)
     {
         var query = context.Jobs
             .AsNoTracking()
@@ -26,9 +28,10 @@ public sealed class JobRepository(AppDbContext context) : IJobRepository
             .ThenInclude(jobSkill => jobSkill.Skill)
             .AsQueryable();
 
-        if (requiredSkillId is { } skillId)
+        if (requiredSkillIds.Count > 0)
         {
-            query = query.Where(job => job.RequiredSkills.Any(jobSkill => jobSkill.SkillId == skillId));
+            query = query.Where(job =>
+                job.RequiredSkills.Any(jobSkill => requiredSkillIds.Contains(jobSkill.SkillId)));
         }
 
         return await query

@@ -10,4 +10,9 @@ public interface ICandidateProfileService
         Guid userId,
         UpdateCandidateProfileRequest request,
         CancellationToken ct);
+
+    Task<CvUploadResultDto> ImportCvAsync(
+        Guid userId,
+        Stream pdfStream,
+        CancellationToken ct);
 }
