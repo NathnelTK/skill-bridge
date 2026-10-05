@@ -4,3 +4,14 @@ bin/
 obj/
 **/bin/
 **/obj/
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.angular/
+**/.angular/
+coverage/
+**/coverage/
+.vs/
+*.user
+*.suo

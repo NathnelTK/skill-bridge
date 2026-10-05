@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkillBridge | MVP Wireframes</title>
+    <link rel="stylesheet" href="wireframes.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#login">SkillBridge <span>WIREFRAMES</span></a>
+      <nav aria-label="Wireframe screens">
+        <a href="#login">Login</a>
+        <a href="#register">Register</a>
+        <a href="#jobs">Jobs</a>
+        <a href="#applications">My Applications</a>
+        <a href="#create-job">Create Job</a>
+        <a href="#applicants">Applicants</a>
+      </nav>
+    </header>
+    <main>
+      <p class="eyebrow">MVP · PRODUCT FLOWS</p>
+      <h1>From job post to a better match.</h1>
+      <p class="intro">Low-fidelity screens for the candidate and employer journeys. Use the navigation to jump between screens.</p>
+
+      <section class="screen auth-screen" id="login">
+        <div class="screen-heading"><span>01</span><h2>Login</h2><small>Candidate or Employer</small></div>
+        <div class="auth-card">
+          <div class="brand-mark">SB</div>
+          <h3>Welcome back</h3><p>Sign in to continue to SkillBridge.</p>
+          <label>Email address<input placeholder="you@example.com" /></label>
+          <label>Password<input placeholder="Enter your password" type="password" /></label>
+          <button>Sign in</button>
+          <p class="center">New to SkillBridge? <a href="#register">Create an account</a></p>
+        </div>
+      </section>
+
+      <section class="screen auth-screen" id="register">
+        <div class="screen-heading"><span>02</span><h2>Register</h2><small>Choose your account type</small></div>
+        <div class="auth-card">
+          <div class="brand-mark">SB</div>
+          <h3>Create your account</h3><p>Start finding the right opportunity or candidate.</p>
+          <div class="choice-row"><button class="choice selected">I'm looking for a job</button><button class="choice">I'm hiring</button></div>
+          <label>Full name<input placeholder="Your name" /></label>
+          <label>Email address<input placeholder="you@example.com" /></label>
+          <label>Password<input placeholder="At least 8 characters" type="password" /></label>
+          <button>Create account</button>
+          <p class="center">Already registered? <a href="#login">Sign in</a></p>
+        </div>
+      </section>
+
+      <section class="screen" id="jobs">
+        <div class="screen-heading"><span>03</span><h2>Jobs</h2><small>Candidate · Browse and find a match</small></div>
+        <div class="app-frame">
+          <aside class="sidebar"><div class="brand">SkillBridge</div><a class="active" href="#jobs">Find jobs</a><a href="#applications">My applications</a><div class="profile">ST&nbsp; Sam Taylor<br /><small>Candidate</small></div></aside>
+          <div class="content"><div class="page-title"><div><p class="eyebrow">OPPORTUNITIES</p><h3>Find your next role</h3></div><button class="outline">My applications</button></div>
+            <div class="search"><span>⌕</span> Job title, skill, or company <button>Search</button></div>
+            <div class="filter-row"><button>Location ▾</button><button>Required skills ▾</button><button>Sort: newest ▾</button></div>
+            <div class="job-card"><div class="job-logo">N</div><div class="job-info"><small>NORTHSTAR LABS · ADDIS ABABA (HYBRID)</small><h4>Full-Stack .NET Developer</h4><p>Build and improve hiring workflows across our .NET and Angular products.</p><div class="tags"><i>C#</i><i>ASP.NET Core</i><i>Angular</i><i>PostgreSQL</i></div></div><button class="save">♡</button></div>
+            <div class="job-card"><div class="job-logo">N</div><div class="job-info"><small>NORTHSTAR LABS · REMOTE</small><h4>Backend Engineer</h4><p>Design reliable APIs and data services for a growing recruitment platform.</p><div class="tags"><i>C#</i><i>REST APIs</i><i>Docker</i></div></div><button class="save">♡</button></div>
+            <div class="job-card"><div class="job-logo">N</div><div class="job-info"><small>NORTHSTAR LABS · ADDIS ABABA</small><h4>Angular Frontend Developer</h4><p>Create clear, accessible experiences for candidates and employers.</p><div class="tags"><i>Angular</i><i>TypeScript</i><i>REST APIs</i></div></div><button class="save">♡</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="applications">
+        <div class="screen-heading"><span>04</span><h2>My Applications</h2><small>Candidate · Track submitted applications</small></div>
+        <div class="app-frame">
+          <aside class="sidebar"><div class="brand">SkillBridge</div><a href="#jobs">Find jobs</a><a class="active" href="#applications">My applications</a><div class="profile">ST&nbsp; Sam Taylor<br /><small>Candidate</small></div></aside>
+          <div class="content"><p class="eyebrow">YOUR JOB SEARCH</p><h3>My applications</h3><p class="muted">Keep track of your applications and next steps.</p>
+            <div class="tabs"><b>All applications&nbsp; 2</b><span>In review&nbsp; 1</span><span>Shortlisted&nbsp; 1</span></div>
+            <div class="table"><div class="table-head"><span>ROLE</span><span>APPLIED</span><span>STATUS</span><span></span></div>
+              <div class="table-row"><span><b>Full-Stack .NET Developer</b><small>Northstar Labs · Addis Ababa</small></span><span>Oct 03, 2026</span><span class="status review">In review</span><span>→</span></div>
+              <div class="table-row"><span><b>Backend Engineer</b><small>Northstar Labs · Remote</small></span><span>Sep 29, 2026</span><span class="status shortlisted">Shortlisted</span><span>→</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="create-job">
+        <div class="screen-heading"><span>05</span><h2>Create Job</h2><small>Employer · Publish a role</small></div>
+        <div class="app-frame">
+          <aside class="sidebar"><div class="brand">SkillBridge</div><a class="active" href="#create-job">My jobs</a><a href="#applicants">Applicants</a><div class="profile">AM&nbsp; Alex Morgan<br /><small>Northstar Labs</small></div></aside>
+          <div class="content form-content"><p class="eyebrow">EMPLOYER WORKSPACE</p><h3>Create a job</h3><p class="muted">Share the role and the skills that matter most.</p>
+            <label>Job title<input placeholder="e.g. Full-Stack .NET Developer" /></label>
+            <label>Location<input placeholder="City, country, or Remote" /></label>
+            <label>Job description<textarea placeholder="Describe the role, responsibilities, and what success looks like…"></textarea></label>
+            <label>Required skills <small>Select skills candidates should have</small><div class="skill-select"><i>C# ×</i><i>ASP.NET Core ×</i><i>Search skills…</i></div></label>
+            <div class="actions"><button class="outline">Save draft</button><button>Publish job</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="applicants">
+        <div class="screen-heading"><span>06</span><h2>Applicants</h2><small>Employer · Review matches and update status</small></div>
+        <div class="app-frame">
+          <aside class="sidebar"><div class="brand">SkillBridge</div><a href="#create-job">My jobs</a><a class="active" href="#applicants">Applicants</a><div class="profile">AM&nbsp; Alex Morgan<br /><small>Northstar Labs</small></div></aside>
+          <div class="content"><a class="back" href="#create-job">←&nbsp; Back to jobs</a><p class="eyebrow">NORTHSTAR LABS · ADDIS ABABA</p><h3>Full-Stack .NET Developer</h3><div class="tabs"><b>Applicants&nbsp; 2</b><span>Job details</span></div>
+            <div class="table"><div class="table-head"><span>CANDIDATE</span><span>SKILL MATCH</span><span>STATUS</span><span>ACTION</span></div>
+              <div class="table-row"><span><b>Sam Taylor</b><small>Backend Developer · Addis Ababa</small></span><span><strong class="match">75%</strong><small>3 of 4 skills</small></span><span class="status review">Received</span><span><button class="small-button">Review</button></span></div>
+              <div class="table-row"><span><b>Jordan Lee</b><small>Software Engineer · Remote</small></span><span><strong class="match">50%</strong><small>2 of 4 skills</small></span><span class="status shortlisted">Shortlisted</span><span><button class="small-button">Review</button></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>SkillBridge MVP wireframes · Candidate and employer flows</footer>
+  </body>
+</html>
