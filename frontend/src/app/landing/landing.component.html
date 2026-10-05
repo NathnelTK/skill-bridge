@@ -1,0 +1,55 @@
+<header class="site-header">
+  <a class="brand" href="#home" aria-label="SkillBridge home">
+    <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="brand-copy"><strong>SkillBridge</strong><small>Connect. Grow. Build Your Future.</small></span>
+  </a>
+
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-label="Toggle navigation"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu()"
+  >
+    <span></span><span></span>
+  </button>
+
+  <nav class="main-nav" [class.is-open]="menuOpen()" aria-label="Main navigation">
+    <a routerLink="/landing" (click)="closeMenu()">Home</a>
+    <a routerLink="/role-select" (click)="closeMenu()">Jobs</a>
+    <a href="#home" (click)="closeMenu()">About</a>
+    <a href="mailto:hello@skillbridge.example" (click)="closeMenu()">Contact</a>
+    <span class="nav-divider" aria-hidden="true"></span>
+    <a class="login-link" routerLink="/role-select" (click)="closeMenu()">Login</a>
+    <a class="button button-small" routerLink="/role-select" (click)="closeMenu()">Sign Up <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">●</span> SKILLBRIDGE</p>
+      <h1>
+        <span class="headline-mask"><span class="headline-line">Your Skills</span></span>
+        <span class="headline-mask"><span class="headline-line">Open New</span></span>
+        <span class="headline-mask"><span class="headline-line headline-accent">Opportunities</span></span>
+      </h1>
+      <p class="hero-description">Find internships and jobs that match your skills. Build your future with SkillBridge.</p>
+      <p class="tagline">Connect. Grow. Build Your Future.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" routerLink="/role-select">Get Started <span aria-hidden="true">→</span></a>
+        <a class="button button-outline" href="#home">Learn More <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="hero-note"><span class="note-check" aria-hidden="true">✓</span> A more human start to your next chapter</div>
+    </div>
+
+    <div class="hero-art">
+      <img
+        class="hero-image"
+        src="/wireframes/the%20new%20landing.jpg"
+        alt="SkillBridge career opportunities shown on a laptop"
+      />
+    </div>
+  </section>
+
+</main>
