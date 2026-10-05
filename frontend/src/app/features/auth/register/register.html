@@ -1,0 +1,64 @@
+<section class="auth-card">
+  <h1>Create your SkillBridge account</h1>
+  <p class="subtitle">Join as a candidate or an employer.</p>
+
+  @if (errorMessage()) {
+    <p class="alert" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <div class="role-toggle" role="group" aria-label="Account type">
+    <button
+      type="button"
+      [class.active]="!isEmployer()"
+      [attr.aria-pressed]="!isEmployer()"
+      (click)="setRole('Candidate')"
+    >
+      Candidate
+    </button>
+    <button
+      type="button"
+      [class.active]="isEmployer()"
+      [attr.aria-pressed]="isEmployer()"
+      (click)="setRole('Employer')"
+    >
+      Employer
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <label for="register-name">Full name</label>
+    <input id="register-name" type="text" formControlName="fullName" autocomplete="name" />
+    @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+      <p class="field-error">Full name is required.</p>
+    }
+
+    <label for="register-email">Email</label>
+    <input id="register-email" type="email" formControlName="email" autocomplete="email" />
+    @if (form.controls.email.touched && form.controls.email.invalid) {
+      <p class="field-error">Enter a valid email address.</p>
+    }
+
+    <label for="register-password">Password</label>
+    <input id="register-password" type="password" formControlName="password" autocomplete="new-password" />
+    @if (form.controls.password.touched && form.controls.password.invalid) {
+      <p class="field-error">Password must be at least 8 characters.</p>
+    }
+
+    @if (isEmployer()) {
+      <label for="register-company">Company name</label>
+      <input id="register-company" type="text" formControlName="companyName" autocomplete="organization" />
+      @if (form.controls.companyName.touched && form.controls.companyName.invalid) {
+        <p class="field-error">Company name is required for employers.</p>
+      }
+    }
+
+    <label for="register-location">Location <span class="optional">(optional)</span></label>
+    <input id="register-location" type="text" formControlName="location" autocomplete="address-level2" />
+
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Creating account…' : 'Create account' }}
+    </button>
+  </form>
+
+  <p class="switch">Already have an account? <a routerLink="/login">Sign in</a></p>
+</section>
