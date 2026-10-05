@@ -5,7 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using TB.Application.Abstractions;
+using TB.Application.Applications;
 using TB.Application.Auth;
+using TB.Application.Candidates;
+using TB.Application.Jobs;
+using TB.Application.Skills;
 using TB.Infrastructure.Auth;
 using TB.Infrastructure.Persistence;
 using TB.Infrastructure.Persistence.Repositories;
@@ -39,7 +43,14 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISkillRepository, SkillRepository>();
+        services.AddScoped<IJobRepository, JobRepository>();
+        services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ISkillService, SkillService>();
+        services.AddScoped<ICandidateProfileService, CandidateProfileService>();
+        services.AddScoped<IJobService, JobService>();
+        services.AddScoped<IApplicationService, ApplicationService>();
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
