@@ -1,0 +1,71 @@
+<div class="job-form">
+  <div class="header">
+    <h1>{{ isEditMode ? 'Edit Job' : 'Post New Job' }}</h1>
+    <button (click)="onCancel()" class="btn btn-secondary">Cancel</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <form *ngIf="!loading" (ngSubmit)="onSubmit()">
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <div class="form-group">
+      <label for="title">Job Title *</label>
+      <input
+        type="text"
+        id="title"
+        [(ngModel)]="formData.title"
+        name="title"
+        required
+        placeholder="e.g. Senior Software Engineer"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        [(ngModel)]="formData.description"
+        name="description"
+        required
+        rows="6"
+        placeholder="Describe the role, responsibilities, and requirements..."
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Location *</label>
+      <input
+        type="text"
+        id="location"
+        [(ngModel)]="formData.location"
+        name="location"
+        required
+        placeholder="e.g. Remote, New York, London"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Required Skills</label>
+      <div class="skills-selection">
+        <div
+          *ngFor="let skill of availableSkills"
+          class="skill-checkbox"
+          [class.selected]="selectedSkillIds.includes(skill.id)"
+          (click)="toggleSkill(skill.id)"
+        >
+          {{ skill.name }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="submitting">
+        {{ submitting ? 'Saving...' : (isEditMode ? 'Update Job' : 'Post Job') }}
+      </button>
+      <button type="button" (click)="onCancel()" class="btn btn-secondary" [disabled]="submitting">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

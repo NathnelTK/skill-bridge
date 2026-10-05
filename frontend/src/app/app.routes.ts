@@ -1,16 +1,34 @@
 import { Routes } from '@angular/router';
 import { CandidateRegistrationComponent } from './candidate-registration/candidate-registration.component';
+import { EmployerRegistrationComponent } from './employer-registration/employer-registration.component';
 import { LandingComponent } from './landing/landing.component';
 import { RoleSelectComponent } from './role-select/role-select.component';
 import { CvUploadComponent } from './cv-upload/cv-upload.component';
 import { JobsComponent } from './jobs/jobs.component';
+import { EmployerDashboardComponent } from './employer-dashboard/employer-dashboard.component';
+import { JobApplicantsComponent } from './job-applicants/job-applicants.component';
+import { JobFormComponent } from './job-form/job-form.component';
+import { LoginComponent } from './login/login.component';
+import { CandidateDashboardComponent } from './candidate-dashboard/candidate-dashboard.component';
+import { CandidateProfileEditComponent } from './candidate-profile-edit/candidate-profile-edit.component';
+import { CandidateApplicationsComponent } from './candidate-applications/candidate-applications.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'landing', component: LandingComponent },
   { path: 'role-select', component: RoleSelectComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'candidate-registration', component: CandidateRegistrationComponent },
+  { path: 'employer-registration', component: EmployerRegistrationComponent },
   { path: 'cv-upload', component: CvUploadComponent },
   { path: 'jobs', component: JobsComponent },
+  { path: 'employer/dashboard', component: EmployerDashboardComponent },
+  { path: 'employer/jobs/:id/applicants', component: JobApplicantsComponent },
+  { path: 'jobs/create', component: JobFormComponent },
+  { path: 'jobs/:id/edit', component: JobFormComponent },
+  { path: 'candidate/dashboard', component: CandidateDashboardComponent },
+  { path: 'candidate/profile/edit', component: CandidateProfileEditComponent },
+  { path: 'candidate/cv-upload', component: CvUploadComponent },
+  { path: 'candidate/applications', component: CandidateApplicationsComponent },
   { path: '**', redirectTo: '' },
 ];

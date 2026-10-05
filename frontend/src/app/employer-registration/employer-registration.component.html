@@ -2,7 +2,7 @@
   <div class="register-card">
     <div class="register-header">
       <h1>Create Your Account</h1>
-      <p>As a candidate, you can find and apply for jobs, track your applications and build your career.</p>
+      <p>As an employer, you can post jobs, manage applications, and find the best talent for your team.</p>
     </div>
 
     <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -54,8 +54,19 @@
       </label>
 
       <label>
+        <span>Company Name</span>
+        <input type="text" formControlName="companyName" placeholder="Your company name" />
+        <span class="error" *ngIf="registerForm.get('companyName')?.touched && registerForm.get('companyName')?.errors?.['required']">
+          Company name is required
+        </span>
+        <span class="error" *ngIf="registerForm.get('companyName')?.touched && registerForm.get('companyName')?.errors?.['minlength']">
+          Company name must be at least 2 characters
+        </span>
+      </label>
+
+      <label>
         <span>Location (Optional)</span>
-        <input type="text" formControlName="location" placeholder="Your location" />
+        <input type="text" formControlName="location" placeholder="Your company location" />
       </label>
 
       <button type="submit" class="primary-btn" [disabled]="isLoading">
@@ -75,12 +86,12 @@
   </div>
 
   <aside class="promo-panel" aria-label="Benefits">
-    <div class="avatar">👤</div>
+    <div class="avatar">🏢</div>
     <ul>
-      <li>Join a growing community of skilled professionals.</li>
-      <li>Build your profile</li>
-      <li>Get matched with job opportunities</li>
-      <li>Track your applications</li>
+      <li>Post job openings and reach skilled candidates.</li>
+      <li>Manage applications efficiently</li>
+      <li>Find the best talent for your team</li>
+      <li>Build your employer brand</li>
     </ul>
   </aside>
 </div>

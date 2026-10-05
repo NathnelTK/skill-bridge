@@ -1,0 +1,29 @@
+<div class="job-applicants">
+  <div class="header">
+    <h1>Job Applicants</h1>
+    <a routerLink="/employer/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading applicants...</div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && applicants.length === 0" class="empty-state">
+    <p>No applicants for this job yet.</p>
+  </div>
+
+  <div *ngIf="!loading && !error && applicants.length > 0" class="applicants-list">
+    <div class="applicant-card" *ngFor="let applicant of applicants">
+      <h3>{{ applicant.fullName }}</h3>
+      <p class="email">{{ applicant.email }}</p>
+      <p *ngIf="applicant.location" class="location">{{ applicant.location }}</p>
+      <div class="skills">
+        <span *ngFor="let skill of applicant.skills" class="skill-tag">{{ skill.name }}</span>
+      </div>
+      <div class="actions">
+        <button class="btn btn-accept" (click)="updateApplicationStatus(applicant.id, 'Accepted')">Accept</button>
+        <button class="btn btn-reject" (click)="updateApplicationStatus(applicant.id, 'Rejected')">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>

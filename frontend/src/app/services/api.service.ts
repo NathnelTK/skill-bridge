@@ -43,11 +43,22 @@ export class ApiService {
     });
   }
 
+  patch<T>(endpoint: string, body: any): Observable<T> {
+    return this.http.patch<T>(`${this.apiUrl}${endpoint}`, body, {
+      headers: this.getHeaders()
+    });
+  }
+
   upload<T>(endpoint: string, file: File): Observable<T> {
     const formData = new FormData();
     formData.append('file', file);
+    const token = localStorage.getItem('auth_token');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
     return this.http.post<T>(`${this.apiUrl}${endpoint}`, formData, {
-      headers: this.getHeaders()
+      headers
     });
   }
 }

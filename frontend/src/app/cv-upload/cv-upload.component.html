@@ -1,6 +1,9 @@
 <div class="cv-upload-container">
   <div class="upload-card">
-    <h2>Upload Your CV</h2>
+    <div class="header">
+      <h2>Upload Your CV</h2>
+      <a routerLink="/candidate/dashboard" class="btn-back">Back to Dashboard</a>
+    </div>
     <p class="subtitle">Upload your CV as a PDF. We'll extract your skills and add them to your profile automatically.</p>
 
     <div class="upload-area" [class.drag-over]="false">
@@ -46,6 +49,7 @@
       <div class="result-success">
         <h3>✓ CV Uploaded Successfully</h3>
         <p>Extracted {{ uploadResult.extractedCharacterCount }} characters from your CV.</p>
+        <p class="redirect-note">Redirecting to dashboard in 2 seconds...</p>
 
         <div class="skills-section" *ngIf="uploadResult.addedSkills.length > 0">
           <h4>New Skills Added:</h4>

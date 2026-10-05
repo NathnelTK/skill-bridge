@@ -1,0 +1,58 @@
+<div class="profile-edit">
+  <div class="header">
+    <h1>Edit Profile</h1>
+    <button (click)="onCancel()" class="btn btn-secondary">Cancel</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <form *ngIf="!loading" (ngSubmit)="onSubmit()">
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <div class="form-group">
+      <label for="fullName">Full Name *</label>
+      <input
+        type="text"
+        id="fullName"
+        [(ngModel)]="formData.fullName"
+        name="fullName"
+        required
+        placeholder="Enter your full name"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="location">Location</label>
+      <input
+        type="text"
+        id="location"
+        [(ngModel)]="formData.location"
+        name="location"
+        placeholder="e.g. Addis Ababa, Remote"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Skills</label>
+      <div class="skills-selection">
+        <div
+          *ngFor="let skill of allSkills"
+          class="skill-checkbox"
+          [class.selected]="selectedSkillIds.includes(skill.id)"
+          (click)="toggleSkill(skill.id)"
+        >
+          {{ skill.name }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="submitting">
+        {{ submitting ? 'Saving...' : 'Save Changes' }}
+      </button>
+      <button type="button" (click)="onCancel()" class="btn btn-secondary" [disabled]="submitting">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

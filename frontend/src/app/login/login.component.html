@@ -1,0 +1,82 @@
+<div class="page-shell">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Login to Your Account</h1>
+      <p>Access your dashboard and continue your journey.</p>
+    </div>
+
+    <div class="seed-accounts">
+      <h3>Quick Test Accounts</h3>
+      <p class="seed-hint">Click to auto-fill credentials for testing:</p>
+      <div class="seed-buttons">
+        <button
+          type="button"
+          class="seed-btn"
+          (click)="useSeedAccount(seedAccounts[0])"
+        >
+          <span class="seed-role">👤 Candidate</span>
+          <span class="seed-creds">{{ seedAccounts[0].email }}</span>
+        </button>
+        <button
+          type="button"
+          class="seed-btn"
+          (click)="useSeedAccount(seedAccounts[1])"
+        >
+          <span class="seed-role">🏢 Employer</span>
+          <span class="seed-creds">{{ seedAccounts[1].email }}</span>
+        </button>
+      </div>
+    </div>
+
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="you@example.com" />
+        <span class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+          Email is required
+        </span>
+        <span class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+          Valid email is required
+        </span>
+      </label>
+
+      <label>
+        <span>Password</span>
+        <div class="password-wrap">
+          <input type="password" formControlName="password" placeholder="Enter your password" />
+          <span class="eye">◉</span>
+        </div>
+        <span class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+          Password is required
+        </span>
+        <span class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']">
+          Password must be at least 6 characters
+        </span>
+      </label>
+
+      <button type="submit" class="primary-btn" [disabled]="isLoading">
+        {{ isLoading ? 'Logging in...' : 'Login' }}
+      </button>
+    </form>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <p class="signup-text">Don't have an account? <a routerLink="/role-select">Sign Up</a></p>
+  </div>
+
+  <aside class="promo-panel" aria-label="Benefits">
+    <div class="avatar">🔐</div>
+    <ul>
+      <li>Secure authentication with JWT tokens</li>
+      <li>Role-based access control</li>
+      <li>Quick access to your dashboard</li>
+      <li>Manage your profile and applications</li>
+    </ul>
+  </aside>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { JobsService, JobSummaryDto, SkillDto } from '../services/jobs.service';
+import { SkillsService } from '../services/skills.service';
 
 @Component({
   selector: 'app-jobs',
@@ -20,6 +21,7 @@ export class JobsComponent implements OnInit {
 
   constructor(
     private jobsService: JobsService,
+    private skillsService: SkillsService,
     private fb: FormBuilder
   ) {
     this.filterForm = this.fb.group({
@@ -29,6 +31,7 @@ export class JobsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadJobs();
+    this.loadSkills();
   }
 
   loadJobs(): void {
@@ -39,7 +42,6 @@ export class JobsComponent implements OnInit {
       next: (jobs) => {
         this.jobs = jobs;
         this.filteredJobs = jobs;
-        this.extractAllSkills(jobs);
         this.isLoading = false;
       },
       error: (error) => {
@@ -49,20 +51,15 @@ export class JobsComponent implements OnInit {
     });
   }
 
-  extractAllSkills(jobs: JobSummaryDto[]): void {
-    const skillMap = new Map<string, SkillDto>();
-
-    jobs.forEach(job => {
-      job.requiredSkills.forEach(skill => {
-        if (!skillMap.has(skill.id)) {
-          skillMap.set(skill.id, skill);
-        }
-      });
+  loadSkills(): void {
+    this.skillsService.list().subscribe({
+      next: (skills) => {
+        this.allSkills = skills.sort((a, b) => a.name.localeCompare(b.name));
+      },
+      error: (error) => {
+        console.error('Failed to load skills', error);
+      }
     });
-
-    this.allSkills = Array.from(skillMap.values()).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
   }
 
   onFilterChange(): void {
@@ -94,5 +91,17 @@ export class JobsComponent implements OnInit {
   clearFilters(): void {
     this.filterForm.patchValue({ selectedSkills: [] });
     this.onFilterChange();
+  }
+
+  applyToJob(jobId: string): void {
+    this.jobsService.apply(jobId).subscribe({
+      next: () => {
+        alert('Application submitted successfully!');
+      },
+      error: (error) => {
+        alert('Failed to submit application. Please try again.');
+        console.error(error);
+      }
+    });
   }
 }

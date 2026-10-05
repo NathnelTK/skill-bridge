@@ -1,0 +1,30 @@
+<div class="employer-dashboard">
+  <div class="header">
+    <h1>Employer Dashboard</h1>
+    <a routerLink="/jobs/create" class="btn btn-primary">Post New Job</a>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading jobs...</div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && jobs.length === 0" class="empty-state">
+    <p>You haven't posted any jobs yet.</p>
+    <a routerLink="/jobs/create" class="btn btn-primary">Post Your First Job</a>
+  </div>
+
+  <div *ngIf="!loading && !error && jobs.length > 0" class="jobs-list">
+    <div class="job-card" *ngFor="let job of jobs">
+      <h3>{{ job.title }}</h3>
+      <p class="location">{{ job.location }}</p>
+      <p class="company">{{ job.companyName }}</p>
+      <p class="skills">
+        <span *ngFor="let skill of job.requiredSkills" class="skill-tag">{{ skill.name }}</span>
+      </p>
+      <div class="actions">
+        <a [routerLink]="['/employer/jobs', job.id, 'applicants']" class="btn btn-secondary">View Applicants</a>
+        <a [routerLink]="['/jobs', job.id, 'edit']" class="btn btn-secondary">Edit Job</a>
+      </div>
+    </div>
+  </div>
+</div>

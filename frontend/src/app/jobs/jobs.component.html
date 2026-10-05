@@ -72,7 +72,7 @@
 
           <div class="job-footer">
             <span class="skill-count">{{ job.requiredSkillCount }} skill{{ job.requiredSkillCount !== 1 ? 's' : '' }} required</span>
-            <button class="btn-view-details">View Details</button>
+            <button class="btn-apply" (click)="applyToJob(job.id)">Apply</button>
           </div>
         </div>
       </div>

@@ -5,23 +5,23 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { AuthService, RegisterRequest } from '../services/auth.service';
 
 @Component({
-  selector: 'app-candidate-registration',
+  selector: 'app-employer-registration',
   standalone: true,
   imports: [RouterLink, CommonModule, ReactiveFormsModule],
-  templateUrl: './candidate-registration.component.html',
-  styleUrl: './candidate-registration.component.scss',
+  templateUrl: './employer-registration.component.html',
+  styleUrl: './employer-registration.component.scss',
 })
-export class CandidateRegistrationComponent {
+export class EmployerRegistrationComponent {
   registerForm: FormGroup;
   isLoading = false;
   errorMessage = '';
   successMessage = '';
 
   readonly checklist = [
-    'Join a growing community of skilled professionals.',
-    'Build your profile',
-    'Get matched with job opportunities',
-    'Track your applications',
+    'Post job openings and reach skilled candidates.',
+    'Manage applications efficiently',
+    'Find the best talent for your team',
+    'Build your employer brand',
   ];
 
   constructor(
@@ -34,6 +34,7 @@ export class CandidateRegistrationComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
+      companyName: ['', [Validators.required, Validators.minLength(2)]],
       location: ['']
     }, { validators: this.passwordMatchValidator });
   }
@@ -53,13 +54,14 @@ export class CandidateRegistrationComponent {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const { fullName, email, password, location } = this.registerForm.value;
+    const { fullName, email, password, companyName, location } = this.registerForm.value;
 
     const request: RegisterRequest = {
       fullName,
       email,
       password,
-      role: 'Candidate',
+      role: 'Employer',
+      companyName,
       location: location || undefined
     };
 
@@ -68,7 +70,7 @@ export class CandidateRegistrationComponent {
         this.authService.saveToken(response.token);
         this.successMessage = 'Registration successful! Redirecting...';
         setTimeout(() => {
-          this.router.navigate(['/candidate/dashboard']);
+          this.router.navigate(['/employer/dashboard']);
         }, 1500);
       },
       error: (error) => {

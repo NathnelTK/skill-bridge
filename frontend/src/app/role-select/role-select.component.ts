@@ -39,6 +39,6 @@ export class RoleSelectComponent {
       return;
     }
 
-    this.router.navigateByUrl('/landing');
+    this.router.navigateByUrl('/employer-registration');
   }
 }

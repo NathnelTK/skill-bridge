@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { CandidatesService, CvUploadResultDto } from '../services/candidates.service';
 import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-cv-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './cv-upload.component.html',
   styleUrl: './cv-upload.component.scss',
 })
@@ -20,7 +21,8 @@ export class CvUploadComponent {
 
   constructor(
     private candidatesService: CandidatesService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private router: Router
   ) {}
 
   onFileSelected(event: Event): void {
@@ -60,6 +62,9 @@ export class CvUploadComponent {
         this.uploadResult = result;
         this.isUploading = false;
         this.selectedFile = null;
+        setTimeout(() => {
+          this.router.navigate(['/candidate/dashboard']);
+        }, 2000);
       },
       error: (error) => {
         this.isUploading = false;

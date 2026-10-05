@@ -17,10 +17,12 @@
   <nav class="main-nav" [class.is-open]="menuOpen()" aria-label="Main navigation">
     <a routerLink="/landing" (click)="closeMenu()">Home</a>
     <a routerLink="/jobs" (click)="closeMenu()">Jobs</a>
+    <a routerLink="/candidate/dashboard" (click)="closeMenu()">Candidate Dashboard</a>
+    <a routerLink="/employer/dashboard" (click)="closeMenu()">Employer Dashboard</a>
     <a href="#home" (click)="closeMenu()">About</a>
     <a href="mailto:hello@skillbridge.example" (click)="closeMenu()">Contact</a>
     <span class="nav-divider" aria-hidden="true"></span>
-    <a class="login-link" routerLink="/role-select" (click)="closeMenu()">Login</a>
+    <a class="login-link" routerLink="/login" (click)="closeMenu()">Login</a>
     <a class="button button-small" routerLink="/role-select" (click)="closeMenu()">Sign Up <span aria-hidden="true">↗</span></a>
   </nav>
 </header>

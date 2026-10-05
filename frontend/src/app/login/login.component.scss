@@ -17,7 +17,7 @@
   padding: 3rem 2rem;
 }
 
-.register-card {
+.login-card {
   background: rgba(15, 22, 42, 0.88);
   border: 1px solid rgba(145, 131, 255, 0.25);
   border-radius: 28px;
@@ -25,35 +25,78 @@
   box-shadow: 0 30px 80px rgba(13, 18, 38, 0.6);
 }
 
-.step-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #6a4cff, #7c5cff);
-  color: #fff;
-  border-radius: 12px;
-  padding: 0.5rem 0.9rem;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.register-header h1 {
+.login-header h1 {
   margin: 1rem 0 0.65rem;
   font-size: clamp(2rem, 3vw, 2.8rem);
   line-height: 1.1;
 }
 
-.register-header p {
+.login-header p {
   margin: 0 0 1.6rem;
   color: #b8bdd6;
   line-height: 1.6;
 }
 
-.register-form {
+.seed-accounts {
+  background: rgba(122, 77, 255, 0.1);
+  border: 1px solid rgba(122, 77, 255, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #b69cff;
+  }
+
+  .seed-hint {
+    margin: 0 0 1rem 0;
+    font-size: 0.85rem;
+    color: #9ba3d6;
+  }
+
+  .seed-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .seed-btn {
+    background: rgba(107, 255, 107, 0.1);
+    border: 1px solid rgba(107, 255, 107, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &:hover {
+      background: rgba(107, 255, 107, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .seed-role {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #6bff6b;
+    }
+
+    .seed-creds {
+      font-size: 0.75rem;
+      color: #9ba3d6;
+    }
+  }
+}
+
+.login-form {
   display: grid;
   gap: 1rem;
 }
 
-.register-form label {
+.login-form label {
   display: grid;
   gap: 0.55rem;
   color: #f1f2ff;
@@ -61,7 +104,7 @@
   font-weight: 600;
 }
 
-.register-form input {
+.login-form input {
   width: 100%;
   border: 1px solid rgba(160, 160, 204, 0.35);
   background: rgba(255, 255, 255, 0.04);
@@ -72,11 +115,11 @@
   outline: none;
 }
 
-.register-form input::placeholder {
+.login-form input::placeholder {
   color: #8a90ad;
 }
 
-.register-form input:focus {
+.login-form input:focus {
   border-color: rgba(140, 120, 255, 0.9);
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.15);
 }
@@ -111,13 +154,13 @@
   box-shadow: 0 18px 35px rgba(122, 77, 255, 0.4);
 }
 
-.signin-text {
+.signup-text {
   margin-top: 1rem;
   color: #c4c9de;
   text-align: center;
 }
 
-.signin-text a {
+.signup-text a {
   color: #b69cff;
   text-decoration: none;
   font-weight: 600;
@@ -200,7 +243,7 @@
     padding: 2rem 1rem;
   }
 
-  .register-card {
+  .login-card {
     padding: 1.4rem 1rem;
   }
 }
