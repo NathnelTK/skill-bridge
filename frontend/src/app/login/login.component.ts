@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -38,6 +38,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -79,12 +80,14 @@ export class LoginComponent {
       .pipe(
         finalize(() => {
           this.isLoading = false;
+          this.changeDetector.markForCheck();
         }),
       )
       .subscribe({
         next: (response) => {
           this.authService.saveToken(response.token);
           this.successMessage = 'Login successful! Redirecting...';
+          this.changeDetector.markForCheck();
 
           const dashboard =
             response.user.role === 'Employer' ? '/employer/dashboard' : '/candidate/dashboard';
@@ -92,6 +95,7 @@ export class LoginComponent {
         },
         error: (error) => {
           this.errorMessage = this.getErrorMessage(error);
+          this.changeDetector.markForCheck();
         },
       });
   }

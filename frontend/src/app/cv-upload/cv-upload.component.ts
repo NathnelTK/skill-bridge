@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CandidatesService, CvUploadResultDto } from '../services/candidates.service';
@@ -22,7 +22,8 @@ export class CvUploadComponent {
   constructor(
     private candidatesService: CandidatesService,
     private translationService: TranslationService,
-    private router: Router
+    private router: Router,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   onFileSelected(event: Event): void {
@@ -62,6 +63,7 @@ export class CvUploadComponent {
         this.uploadResult = result;
         this.isUploading = false;
         this.selectedFile = null;
+        this.changeDetector.markForCheck();
         setTimeout(() => {
           this.router.navigate(['/candidate/dashboard']);
         }, 2000);
@@ -69,7 +71,8 @@ export class CvUploadComponent {
       error: (error) => {
         this.isUploading = false;
         this.errorMessage = error.error?.detail || 'Failed to upload CV. Please try again.';
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -80,7 +83,7 @@ export class CvUploadComponent {
       },
       error: (error) => {
         console.error('Translation failed:', error);
-      }
+      },
     });
   }
 

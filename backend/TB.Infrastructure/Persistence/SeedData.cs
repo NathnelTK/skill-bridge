@@ -24,6 +24,9 @@ internal static class SeedData
     public static readonly Guid FullStackJobId = Guid.Parse("30000000-0000-0000-0000-000000000001");
     public static readonly Guid BackendJobId = Guid.Parse("30000000-0000-0000-0000-000000000002");
     public static readonly Guid FrontendJobId = Guid.Parse("30000000-0000-0000-0000-000000000003");
+    public static readonly Guid DevOpsJobId = Guid.Parse("30000000-0000-0000-0000-000000000004");
+    public static readonly Guid DataEngineerJobId = Guid.Parse("30000000-0000-0000-0000-000000000005");
+    public static readonly Guid ApiDeveloperJobId = Guid.Parse("30000000-0000-0000-0000-000000000006");
 
     public static readonly User[] Users =
     [
@@ -99,6 +102,33 @@ internal static class SeedData
             Description = "Create clear, accessible experiences for candidates and employers.",
             Location = "Addis Ababa",
             CreatedAtUtc = new DateTime(2026, 1, 4, 0, 0, 0, DateTimeKind.Utc)
+        },
+        new()
+        {
+            Id = DevOpsJobId,
+            EmployerId = EmployerId,
+            Title = "DevOps Engineer",
+            Description = "Improve deployment automation, observability, and reliability for our cloud services.",
+            Location = "Remote",
+            CreatedAtUtc = new DateTime(2026, 1, 5, 0, 0, 0, DateTimeKind.Utc)
+        },
+        new()
+        {
+            Id = DataEngineerJobId,
+            EmployerId = EmployerId,
+            Title = "Data Engineer",
+            Description = "Build dependable data pipelines and PostgreSQL-backed services for our hiring platform.",
+            Location = "Addis Ababa (Hybrid)",
+            CreatedAtUtc = new DateTime(2026, 1, 6, 0, 0, 0, DateTimeKind.Utc)
+        },
+        new()
+        {
+            Id = ApiDeveloperJobId,
+            EmployerId = EmployerId,
+            Title = "API Developer",
+            Description = "Design and maintain secure REST APIs that power our candidate and employer experiences.",
+            Location = "Remote",
+            CreatedAtUtc = new DateTime(2026, 1, 7, 0, 0, 0, DateTimeKind.Utc)
         }
     ];
 
@@ -114,6 +144,13 @@ internal static class SeedData
         new() { JobId = BackendJobId, SkillId = DockerSkillId },
         new() { JobId = FrontendJobId, SkillId = AngularSkillId },
         new() { JobId = FrontendJobId, SkillId = TypeScriptSkillId },
-        new() { JobId = FrontendJobId, SkillId = RestSkillId }
+        new() { JobId = FrontendJobId, SkillId = RestSkillId },
+        new() { JobId = DevOpsJobId, SkillId = DockerSkillId },
+        new() { JobId = DevOpsJobId, SkillId = GitSkillId },
+        new() { JobId = DataEngineerJobId, SkillId = PostgresSkillId },
+        new() { JobId = DataEngineerJobId, SkillId = DockerSkillId },
+        new() { JobId = ApiDeveloperJobId, SkillId = AspNetSkillId },
+        new() { JobId = ApiDeveloperJobId, SkillId = RestSkillId },
+        new() { JobId = ApiDeveloperJobId, SkillId = PostgresSkillId }
     ];
 }

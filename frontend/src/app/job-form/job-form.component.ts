@@ -1,8 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { JobsService, CreateJobRequest, UpdateJobRequest, JobDto, SkillDto } from '../services/jobs.service';
+import {
+  JobsService,
+  CreateJobRequest,
+  UpdateJobRequest,
+  JobDto,
+  SkillDto,
+} from '../services/jobs.service';
 import { SkillsService } from '../services/skills.service';
 
 @Component({
@@ -10,13 +16,14 @@ import { SkillsService } from '../services/skills.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './job-form.component.html',
-  styleUrl: './job-form.component.scss'
+  styleUrl: './job-form.component.scss',
 })
 export class JobFormComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private jobsService = inject(JobsService);
   private skillsService = inject(SkillsService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   jobId: string | null = null;
   isEditMode = false;
@@ -30,7 +37,7 @@ export class JobFormComponent implements OnInit {
   formData = {
     title: '',
     description: '',
-    location: ''
+    location: '',
   };
 
   ngOnInit(): void {
@@ -46,10 +53,12 @@ export class JobFormComponent implements OnInit {
     this.skillsService.list().subscribe({
       next: (skills) => {
         this.availableSkills = skills;
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         console.error('Failed to load skills', err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -61,14 +70,16 @@ export class JobFormComponent implements OnInit {
         this.formData.title = job.title;
         this.formData.description = job.description;
         this.formData.location = job.location;
-        this.selectedSkillIds = job.requiredSkills.map(s => s.id);
+        this.selectedSkillIds = job.requiredSkills.map((s) => s.id);
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         this.error = 'Failed to load job';
         this.loading = false;
         console.error(err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -97,7 +108,7 @@ export class JobFormComponent implements OnInit {
         title: this.formData.title,
         description: this.formData.description,
         location: this.formData.location,
-        requiredSkillIds: this.selectedSkillIds
+        requiredSkillIds: this.selectedSkillIds,
       };
       this.jobsService.update(this.jobId, request).subscribe({
         next: () => {
@@ -107,14 +118,15 @@ export class JobFormComponent implements OnInit {
           this.error = 'Failed to update job';
           this.submitting = false;
           console.error(err);
-        }
+          this.changeDetector.markForCheck();
+        },
       });
     } else {
       const request: CreateJobRequest = {
         title: this.formData.title,
         description: this.formData.description,
         location: this.formData.location,
-        requiredSkillIds: this.selectedSkillIds
+        requiredSkillIds: this.selectedSkillIds,
       };
       this.jobsService.create(request).subscribe({
         next: () => {
@@ -124,7 +136,8 @@ export class JobFormComponent implements OnInit {
           this.error = 'Failed to create job';
           this.submitting = false;
           console.error(err);
-        }
+          this.changeDetector.markForCheck();
+        },
       });
     }
   }

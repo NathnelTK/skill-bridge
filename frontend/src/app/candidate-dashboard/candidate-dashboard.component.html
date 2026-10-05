@@ -1,43 +1,231 @@
-<div class="candidate-dashboard">
-  <div class="header">
-    <h1>Candidate Dashboard</h1>
-    <button (click)="logout()" class="btn btn-secondary">Logout</button>
-  </div>
+<div class="dashboard-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/" aria-label="SkillBridge home">
+      <span class="brand-mark">S</span>
+      <span class="brand-name">skill<span>bridge</span></span>
+    </a>
 
-  <div *ngIf="loading" class="loading">Loading profile...</div>
+    <nav class="top-nav" aria-label="Candidate navigation">
+      <a mat-button class="nav-link active" routerLink="/candidate/dashboard">Dashboard</a>
+      <a mat-button class="nav-link" routerLink="/jobs">Jobs</a>
+      <a mat-button class="nav-link" routerLink="/candidate/applications">My applications</a>
+    </nav>
 
-  <div *ngIf="error" class="error">{{ error }}</div>
-
-  <div *ngIf="!loading && !error && profile" class="dashboard-content">
-    <div class="profile-card">
-      <h2>My Profile</h2>
-      <div class="profile-info">
-        <div class="info-row">
-          <span class="label">Name:</span>
-          <span class="value">{{ profile.fullName }}</span>
-        </div>
-        <div class="info-row">
-          <span class="label">Email:</span>
-          <span class="value">{{ profile.email }}</span>
-        </div>
-        <div class="info-row" *ngIf="profile.location">
-          <span class="label">Location:</span>
-          <span class="value">{{ profile.location }}</span>
-        </div>
-      </div>
-
-      <div class="skills-section">
-        <h3>My Skills</h3>
-        <div class="skills-list">
-          <span *ngFor="let skill of profile.skills" class="skill-tag">{{ skill.name }}</span>
-        </div>
-      </div>
-
-      <div class="actions">
-        <a routerLink="/candidate/profile/edit" class="btn btn-primary">Edit Profile</a>
-        <a routerLink="/candidate/cv-upload" class="btn btn-secondary">Upload CV</a>
-        <a routerLink="/candidate/applications" class="btn btn-secondary">My Applications</a>
-      </div>
+    <div class="account-actions">
+      <a mat-button class="profile-link" routerLink="/candidate/profile/edit">Profile</a>
+      <button
+        mat-icon-button
+        class="logout-button"
+        type="button"
+        aria-label="Log out"
+        (click)="logout()"
+      >
+        <span aria-hidden="true">↗</span>
+      </button>
     </div>
-  </div>
+  </header>
+
+  <main class="dashboard-content">
+    <section class="welcome-row">
+      <div>
+        <p class="eyebrow">CANDIDATE WORKSPACE</p>
+        <h1>
+          Welcome back<span *ngIf="profile">, {{ firstName }}</span
+          ><span class="accent-dot">.</span>
+        </h1>
+        <p class="welcome-copy">Here’s what’s happening with your job search.</p>
+      </div>
+      <a mat-flat-button class="browse-button" routerLink="/jobs">
+        <span aria-hidden="true">⌕</span>
+        Explore jobs
+      </a>
+    </section>
+
+    <div *ngIf="loading" class="loading-state" role="status">
+      <mat-spinner diameter="34" aria-label="Loading candidate dashboard"></mat-spinner>
+      <span>Preparing your dashboard…</span>
+    </div>
+
+    <mat-card *ngIf="error" appearance="outlined" class="error-card" role="alert">
+      <mat-card-content>
+        <span class="error-mark" aria-hidden="true">!</span>
+        <div>
+          <h2>We couldn’t load your dashboard</h2>
+          <p>{{ error }}</p>
+        </div>
+        <button mat-stroked-button type="button" (click)="loadDashboard()">Try again</button>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-container *ngIf="!loading && !error && profile">
+      <section class="stats-grid" aria-label="Job search overview">
+        <a class="stat-link" routerLink="/jobs">
+          <mat-card appearance="outlined" class="stat-card stat-jobs">
+            <mat-card-content>
+              <span class="stat-icon" aria-hidden="true">⌕</span>
+              <span class="stat-label">Available jobs</span>
+              <strong class="stat-value">{{ jobs.length }}</strong>
+              <span class="stat-caption">Fresh opportunities to explore</span>
+            </mat-card-content>
+          </mat-card>
+        </a>
+
+        <a class="stat-link" routerLink="/candidate/applications">
+          <mat-card appearance="outlined" class="stat-card stat-applied">
+            <mat-card-content>
+              <span class="stat-icon" aria-hidden="true">↗</span>
+              <span class="stat-label">Applied</span>
+              <strong class="stat-value">{{ applications.length + appliedJobIds.size }}</strong>
+              <span class="stat-caption">Applications sent</span>
+            </mat-card-content>
+          </mat-card>
+        </a>
+
+        <a class="stat-link" routerLink="/candidate/applications">
+          <mat-card appearance="outlined" class="stat-card stat-shortlisted">
+            <mat-card-content>
+              <span class="stat-icon" aria-hidden="true">✦</span>
+              <span class="stat-label">Shortlisted</span>
+              <strong class="stat-value">{{ shortlistedCount }}</strong>
+              <span class="stat-caption">Employers want to meet you</span>
+            </mat-card-content>
+          </mat-card>
+        </a>
+
+        <a class="stat-link" routerLink="/candidate/applications">
+          <mat-card appearance="outlined" class="stat-card stat-rejected">
+            <mat-card-content>
+              <span class="stat-icon" aria-hidden="true">↘</span>
+              <span class="stat-label">Not selected</span>
+              <strong class="stat-value">{{ rejectedCount }}</strong>
+              <span class="stat-caption">Keep going—your next role awaits</span>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      </section>
+
+      <section class="profile-banner">
+        <div class="profile-avatar" aria-hidden="true">{{ initials }}</div>
+        <div class="profile-summary">
+          <span class="profile-name">{{ profile.fullName }}</span>
+          <span class="profile-detail">{{ profile.location || profile.email }}</span>
+        </div>
+        <div class="profile-skills" *ngIf="profile.skills.length">
+          <mat-chip-set aria-label="Your skills">
+            <mat-chip *ngFor="let skill of profile.skills.slice(0, 4)">{{ skill.name }}</mat-chip>
+            <mat-chip *ngIf="profile.skills.length > 4">+{{ profile.skills.length - 4 }}</mat-chip>
+          </mat-chip-set>
+        </div>
+        <a mat-stroked-button class="edit-profile-button" routerLink="/candidate/profile/edit"
+          >Edit profile</a
+        >
+      </section>
+
+      <section class="recommendations">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CURATED FOR YOU</p>
+            <h2>Recommended jobs</h2>
+            <p class="section-copy">Roles picked to match your skills and interests.</p>
+          </div>
+          <a mat-button class="view-all-link" routerLink="/jobs"
+            >View all jobs <span aria-hidden="true">→</span></a
+          >
+        </div>
+
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search by title, company, or skill</mat-label>
+          <span matTextPrefix aria-hidden="true">⌕&nbsp;</span>
+          <input matInput type="search" [value]="searchTerm" (input)="onSearch($event)" />
+          <button
+            *ngIf="searchTerm"
+            matSuffix
+            mat-icon-button
+            type="button"
+            aria-label="Clear search"
+            (click)="clearSearch()"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </mat-form-field>
+
+        <p *ngIf="applyError" class="apply-error" role="alert">{{ applyError }}</p>
+
+        <div *ngIf="visibleJobs.length; else noJobs" class="jobs-grid">
+          <mat-card
+            *ngFor="let job of visibleJobs; let index = index"
+            appearance="outlined"
+            class="job-card"
+            [class.job-card-featured]="index === 0"
+          >
+            <mat-card-content>
+              <div class="job-card-top">
+                <div class="company-avatar" [attr.data-tone]="index % 4">
+                  {{ companyInitial(job.companyName) }}
+                </div>
+                <mat-chip class="match-chip" *ngIf="matchingSkillCount(job) > 0">
+                  ✦ {{ matchingSkillCount(job) }} skill{{
+                    matchingSkillCount(job) === 1 ? '' : 's'
+                  }}
+                  match
+                </mat-chip>
+                <span class="job-date">{{ job.createdAtUtc | date: 'MMM d' }}</span>
+              </div>
+
+              <p class="job-company">{{ job.companyName }}</p>
+              <h3>{{ job.title }}</h3>
+              <p class="job-location"><span aria-hidden="true">⌖</span> {{ job.location }}</p>
+
+              <mat-chip-set class="job-skills" aria-label="Required skills">
+                <mat-chip *ngFor="let skill of job.requiredSkills.slice(0, 4)">{{
+                  skill.name
+                }}</mat-chip>
+                <mat-chip *ngIf="job.requiredSkills.length > 4"
+                  >+{{ job.requiredSkills.length - 4 }}</mat-chip
+                >
+              </mat-chip-set>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <button
+                mat-flat-button
+                class="apply-button"
+                type="button"
+                [disabled]="applyingJobId === job.id || appliedJobIds.has(job.id)"
+                (click)="applyToJob(job.id)"
+              >
+                {{
+                  appliedJobIds.has(job.id)
+                    ? 'Applied'
+                    : applyingJobId === job.id
+                      ? 'Applying…'
+                      : 'Apply now'
+                }}
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+
+        <ng-template #noJobs>
+          <mat-card appearance="outlined" class="empty-card">
+            <mat-card-content>
+              <span class="empty-icon" aria-hidden="true">⌕</span>
+              <h3>{{ searchTerm ? 'No matching jobs' : 'No recommendations yet' }}</h3>
+              <p>
+                {{
+                  searchTerm
+                    ? 'Try a different title, company, or skill.'
+                    : 'New opportunities will show up here as they become available.'
+                }}
+              </p>
+              <button *ngIf="searchTerm" mat-button type="button" (click)="clearSearch()">
+                Clear search
+              </button>
+              <a *ngIf="!searchTerm" mat-button routerLink="/jobs">Browse all jobs</a>
+            </mat-card-content>
+          </mat-card>
+        </ng-template>
+      </section>
+    </ng-container>
+  </main>
 </div>

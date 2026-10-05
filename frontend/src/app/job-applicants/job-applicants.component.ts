@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EmployerService, ApplicantDto } from '../services/employer.service';
@@ -9,12 +9,13 @@ import { ApplicationsService, ApplicationDto } from '../services/applications.se
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './job-applicants.component.html',
-  styleUrl: './job-applicants.component.scss'
+  styleUrl: './job-applicants.component.scss',
 })
 export class JobApplicantsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private employerService = inject(EmployerService);
   private applicationsService = inject(ApplicationsService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   jobId: string = '';
   applicants: ApplicantDto[] = [];
@@ -37,12 +38,14 @@ export class JobApplicantsComponent implements OnInit {
       next: (applicants) => {
         this.applicants = applicants;
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         this.error = 'Failed to load applicants';
         this.loading = false;
         console.error(err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -50,11 +53,13 @@ export class JobApplicantsComponent implements OnInit {
     this.applicationsService.updateStatus(applicationId, { status: newStatus }).subscribe({
       next: () => {
         alert(`Application status updated to ${newStatus}`);
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         alert('Failed to update application status');
         console.error(err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 }

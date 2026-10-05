@@ -1,34 +1,89 @@
 import { Routes } from '@angular/router';
-import { CandidateRegistrationComponent } from './candidate-registration/candidate-registration.component';
-import { EmployerRegistrationComponent } from './employer-registration/employer-registration.component';
-import { LandingComponent } from './landing/landing.component';
-import { RoleSelectComponent } from './role-select/role-select.component';
-import { CvUploadComponent } from './cv-upload/cv-upload.component';
-import { JobsComponent } from './jobs/jobs.component';
-import { EmployerDashboardComponent } from './employer-dashboard/employer-dashboard.component';
-import { JobApplicantsComponent } from './job-applicants/job-applicants.component';
-import { JobFormComponent } from './job-form/job-form.component';
-import { LoginComponent } from './login/login.component';
-import { CandidateDashboardComponent } from './candidate-dashboard/candidate-dashboard.component';
-import { CandidateProfileEditComponent } from './candidate-profile-edit/candidate-profile-edit.component';
-import { CandidateApplicationsComponent } from './candidate-applications/candidate-applications.component';
 
 export const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'landing', component: LandingComponent },
-  { path: 'role-select', component: RoleSelectComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'candidate-registration', component: CandidateRegistrationComponent },
-  { path: 'employer-registration', component: EmployerRegistrationComponent },
-  { path: 'cv-upload', component: CvUploadComponent },
-  { path: 'jobs', component: JobsComponent },
-  { path: 'employer/dashboard', component: EmployerDashboardComponent },
-  { path: 'employer/jobs/:id/applicants', component: JobApplicantsComponent },
-  { path: 'jobs/create', component: JobFormComponent },
-  { path: 'jobs/:id/edit', component: JobFormComponent },
-  { path: 'candidate/dashboard', component: CandidateDashboardComponent },
-  { path: 'candidate/profile/edit', component: CandidateProfileEditComponent },
-  { path: 'candidate/cv-upload', component: CvUploadComponent },
-  { path: 'candidate/applications', component: CandidateApplicationsComponent },
+  {
+    path: '',
+    loadComponent: () => import('./landing/landing.component').then((m) => m.LandingComponent),
+  },
+  {
+    path: 'landing',
+    loadComponent: () => import('./landing/landing.component').then((m) => m.LandingComponent),
+  },
+  {
+    path: 'role-select',
+    loadComponent: () =>
+      import('./role-select/role-select.component').then((m) => m.RoleSelectComponent),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'candidate-registration',
+    loadComponent: () =>
+      import('./candidate-registration/candidate-registration.component').then(
+        (m) => m.CandidateRegistrationComponent,
+      ),
+  },
+  {
+    path: 'employer-registration',
+    loadComponent: () =>
+      import('./employer-registration/employer-registration.component').then(
+        (m) => m.EmployerRegistrationComponent,
+      ),
+  },
+  {
+    path: 'cv-upload',
+    loadComponent: () => import('./cv-upload/cv-upload.component').then((m) => m.CvUploadComponent),
+  },
+  {
+    path: 'jobs',
+    loadComponent: () => import('./jobs/jobs.component').then((m) => m.JobsComponent),
+  },
+  {
+    path: 'employer/dashboard',
+    loadComponent: () =>
+      import('./employer-dashboard/employer-dashboard.component').then(
+        (m) => m.EmployerDashboardComponent,
+      ),
+  },
+  {
+    path: 'employer/jobs/:id/applicants',
+    loadComponent: () =>
+      import('./job-applicants/job-applicants.component').then((m) => m.JobApplicantsComponent),
+  },
+  {
+    path: 'jobs/create',
+    loadComponent: () => import('./job-form/job-form.component').then((m) => m.JobFormComponent),
+  },
+  {
+    path: 'jobs/:id/edit',
+    loadComponent: () => import('./job-form/job-form.component').then((m) => m.JobFormComponent),
+  },
+  {
+    path: 'candidate/dashboard',
+    loadComponent: () =>
+      import('./candidate-dashboard/candidate-dashboard.component').then(
+        (m) => m.CandidateDashboardComponent,
+      ),
+  },
+  {
+    path: 'candidate/profile/edit',
+    loadComponent: () =>
+      import('./candidate-profile-edit/candidate-profile-edit.component').then(
+        (m) => m.CandidateProfileEditComponent,
+      ),
+  },
+  {
+    path: 'candidate/cv-upload',
+    loadComponent: () => import('./cv-upload/cv-upload.component').then((m) => m.CvUploadComponent),
+  },
+  {
+    path: 'candidate/applications',
+    loadComponent: () =>
+      import('./candidate-applications/candidate-applications.component').then(
+        (m) => m.CandidateApplicationsComponent,
+      ),
+  },
   { path: '**', redirectTo: '' },
 ];

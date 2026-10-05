@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { JobsService, JobSummaryDto, SkillDto } from '../services/jobs.service';
@@ -22,10 +22,11 @@ export class JobsComponent implements OnInit {
   constructor(
     private jobsService: JobsService,
     private skillsService: SkillsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this.filterForm = this.fb.group({
-      selectedSkills: [[]]
+      selectedSkills: [[]],
     });
   }
 
@@ -43,11 +44,13 @@ export class JobsComponent implements OnInit {
         this.jobs = jobs;
         this.filteredJobs = jobs;
         this.isLoading = false;
+        this.changeDetector.markForCheck();
       },
       error: (error) => {
         this.errorMessage = 'Failed to load jobs. Please try again.';
         this.isLoading = false;
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -55,10 +58,12 @@ export class JobsComponent implements OnInit {
     this.skillsService.list().subscribe({
       next: (skills) => {
         this.allSkills = skills.sort((a, b) => a.name.localeCompare(b.name));
+        this.changeDetector.markForCheck();
       },
       error: (error) => {
         console.error('Failed to load skills', error);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -68,8 +73,8 @@ export class JobsComponent implements OnInit {
     if (selectedSkillIds.length === 0) {
       this.filteredJobs = this.jobs;
     } else {
-      this.filteredJobs = this.jobs.filter(job =>
-        job.requiredSkills.some(skill => selectedSkillIds.includes(skill.id))
+      this.filteredJobs = this.jobs.filter((job) =>
+        job.requiredSkills.some((skill) => selectedSkillIds.includes(skill.id)),
       );
     }
   }
@@ -101,7 +106,7 @@ export class JobsComponent implements OnInit {
       error: (error) => {
         alert('Failed to submit application. Please try again.');
         console.error(error);
-      }
+      },
     });
   }
 }

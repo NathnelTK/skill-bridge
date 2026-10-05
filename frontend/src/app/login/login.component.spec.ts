@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -47,6 +48,10 @@ describe('LoginComponent', () => {
             },
           },
         },
+        {
+          provide: ChangeDetectorRef,
+          useValue: { markForCheck: () => undefined },
+        },
       ],
     });
 
@@ -54,6 +59,7 @@ describe('LoginComponent', () => {
       new FormBuilder(),
       TestBed.inject(AuthService),
       TestBed.inject(Router),
+      TestBed.inject(ChangeDetectorRef),
     );
   });
 

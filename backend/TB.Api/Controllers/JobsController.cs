@@ -14,6 +14,7 @@ public sealed class JobsController(
     IApplicationService applicationService) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<JobSummaryDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<JobSummaryDto>>> Browse(
         [FromQuery] Guid[]? skillId,
@@ -24,6 +25,7 @@ public sealed class JobsController(
     }
 
     [HttpGet("{id:guid}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(JobDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<JobDto>> Get(Guid id, CancellationToken ct)

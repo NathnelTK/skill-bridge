@@ -1,8 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CandidatesService, CandidateProfileDto, UpdateCandidateProfileRequest } from '../services/candidates.service';
+import {
+  CandidatesService,
+  CandidateProfileDto,
+  UpdateCandidateProfileRequest,
+} from '../services/candidates.service';
 import { SkillsService, SkillDto } from '../services/skills.service';
 
 @Component({
@@ -10,12 +14,13 @@ import { SkillsService, SkillDto } from '../services/skills.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './candidate-profile-edit.component.html',
-  styleUrl: './candidate-profile-edit.component.scss'
+  styleUrl: './candidate-profile-edit.component.scss',
 })
 export class CandidateProfileEditComponent implements OnInit {
   private router = inject(Router);
   private candidatesService = inject(CandidatesService);
   private skillsService = inject(SkillsService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   profile: CandidateProfileDto | null = null;
   allSkills: SkillDto[] = [];
@@ -26,7 +31,7 @@ export class CandidateProfileEditComponent implements OnInit {
 
   formData = {
     fullName: '',
-    location: ''
+    location: '',
   };
 
   ngOnInit(): void {
@@ -41,14 +46,16 @@ export class CandidateProfileEditComponent implements OnInit {
         this.profile = profile;
         this.formData.fullName = profile.fullName;
         this.formData.location = profile.location || '';
-        this.selectedSkillIds = profile.skills.map(s => s.id);
+        this.selectedSkillIds = profile.skills.map((s) => s.id);
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         this.error = 'Failed to load profile';
         this.loading = false;
         console.error(err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -56,10 +63,12 @@ export class CandidateProfileEditComponent implements OnInit {
     this.skillsService.list().subscribe({
       next: (skills) => {
         this.allSkills = skills.sort((a, b) => a.name.localeCompare(b.name));
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         console.error('Failed to load skills', err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
@@ -86,7 +95,7 @@ export class CandidateProfileEditComponent implements OnInit {
     const request: UpdateCandidateProfileRequest = {
       fullName: this.formData.fullName,
       location: this.formData.location || undefined,
-      skillIds: this.selectedSkillIds
+      skillIds: this.selectedSkillIds,
     };
 
     this.candidatesService.updateProfile(request).subscribe({
@@ -97,7 +106,8 @@ export class CandidateProfileEditComponent implements OnInit {
         this.error = 'Failed to update profile';
         this.submitting = false;
         console.error(err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 

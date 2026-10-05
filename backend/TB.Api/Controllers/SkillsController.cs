@@ -11,6 +11,7 @@ namespace TB.Api.Controllers;
 public sealed class SkillsController(ISkillService skillService) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<SkillDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<SkillDto>>> List(CancellationToken ct)
     {

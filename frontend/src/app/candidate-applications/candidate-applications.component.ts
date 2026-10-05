@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CandidatesService, CandidateApplicationDto } from '../services/candidates.service';
@@ -8,10 +8,11 @@ import { CandidatesService, CandidateApplicationDto } from '../services/candidat
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './candidate-applications.component.html',
-  styleUrl: './candidate-applications.component.scss'
+  styleUrl: './candidate-applications.component.scss',
 })
 export class CandidateApplicationsComponent implements OnInit {
   private candidatesService = inject(CandidatesService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   applications: CandidateApplicationDto[] = [];
   loading = true;
@@ -27,12 +28,14 @@ export class CandidateApplicationsComponent implements OnInit {
       next: (applications) => {
         this.applications = applications;
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
       error: (err) => {
         this.error = 'Failed to load applications';
         this.loading = false;
         console.error(err);
-      }
+        this.changeDetector.markForCheck();
+      },
     });
   }
 
