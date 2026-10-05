@@ -5,6 +5,10 @@ namespace TB.Infrastructure.Persistence;
 
 internal static class SeedData
 {
+    // Pinned BCrypt (work factor 12) hash of the documented demo password "Password123!".
+    // Hashes are salted per run, so one literal is pinned here to keep the migration deterministic.
+    private const string DemoPasswordHash = "$2a$12$RbeGHvbfZA0bETn2OUbutue9R3Wt.WjtCmroac.e4Lajmrh7RRTX6";
+
     public static readonly Guid EmployerId = Guid.Parse("10000000-0000-0000-0000-000000000001");
     public static readonly Guid CandidateId = Guid.Parse("10000000-0000-0000-0000-000000000002");
 
@@ -27,7 +31,7 @@ internal static class SeedData
         {
             Id = EmployerId,
             Email = "employer@skillbridge.demo",
-            PasswordHash = "!seed-only-account!",
+            PasswordHash = DemoPasswordHash,
             Role = UserRole.Employer,
             FullName = "Alex Morgan",
             CompanyName = "Northstar Labs",
@@ -38,7 +42,7 @@ internal static class SeedData
         {
             Id = CandidateId,
             Email = "candidate@skillbridge.demo",
-            PasswordHash = "!seed-only-account!",
+            PasswordHash = DemoPasswordHash,
             Role = UserRole.Candidate,
             FullName = "Sam Taylor",
             Location = "Addis Ababa",

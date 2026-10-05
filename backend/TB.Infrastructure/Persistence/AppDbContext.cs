@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TB.Domain.Entities;
 using TB.Domain.Enums;
+using ApplicationEntity = TB.Domain.Entities.Application;
 
 namespace TB.Infrastructure.Persistence;
 
@@ -11,7 +12,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<CandidateSkill> CandidateSkills => Set<CandidateSkill>();
     public DbSet<Job> Jobs => Set<Job>();
     public DbSet<JobSkill> JobSkills => Set<JobSkill>();
-    public DbSet<Application> Applications => Set<Application>();
+    public DbSet<ApplicationEntity> Applications => Set<ApplicationEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -89,7 +90,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.HasData(SeedData.JobSkills);
         });
 
-        modelBuilder.Entity<Application>(entity =>
+        modelBuilder.Entity<ApplicationEntity>(entity =>
         {
             entity.ToTable("applications");
             entity.HasKey(application => application.Id);
