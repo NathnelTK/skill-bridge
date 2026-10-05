@@ -1,0 +1,48 @@
+<main class="page">
+  <section class="intro">
+    <div class="brand">
+      <span class="brand__logo">S</span>
+      <div>
+        <strong>SkillBridge</strong>
+        <small>Connect. Grow. Build Your Future.</small>
+      </div>
+    </div>
+
+    <img class="intro__art" src="/join-illustration.svg" alt="Two people working on a laptop" />
+
+    <h1>Join SkillBridge</h1>
+    <p>Create an account and start your journey towards better opportunities.</p>
+  </section>
+
+  <section class="roles" aria-labelledby="role-heading">
+    <h2 id="role-heading">Choose Your Role</h2>
+
+    <div class="roles__list" role="radiogroup" aria-labelledby="role-heading">
+      @for (role of roles; track role.id) {
+        <button
+          type="button"
+          class="role"
+          role="radio"
+          [class.role--active]="selected() === role.id"
+          [attr.aria-checked]="selected() === role.id"
+          (click)="select(role.id)"
+        >
+          <span class="role__icon">{{ role.icon }}</span>
+          <span class="role__text">
+            <strong>{{ role.title }}</strong>
+            <small>{{ role.desc }}</small>
+          </span>
+          @if (selected() === role.id) {
+            <span class="role__check" aria-hidden="true">✓</span>
+          }
+        </button>
+      }
+    </div>
+
+    <button type="button" class="cta" (click)="continue()">Continue</button>
+
+    <p class="login">
+      Already have an account? <a routerLink="/login">Login</a>
+    </p>
+  </section>
+</main>

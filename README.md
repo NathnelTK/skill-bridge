@@ -53,6 +53,14 @@ npm start
 
 View the six static screen wireframes at `/wireframes/index.html` from the Angular development server.
 
+## Frontend changes in this branch
+
+- Added a landing page flow with interactive navigation and a working Get Started CTA.
+- Implemented the role-selection screen so users can choose Candidate or Employer.
+- Wired the Candidate path to a registration form matching the mock design.
+- Added a confirm-password field and a fixed public asset route for the registration illustration.
+- Verified the Angular app builds successfully from the frontend project.
+
 ## Team role assignments
 
 The team roster was not provided, so assignments are by role; map a teammate to each role before implementation begins.
