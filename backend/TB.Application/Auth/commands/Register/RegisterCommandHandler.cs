@@ -1,5 +1,6 @@
 using MediatR;
-using TB.Application.Auth.Dtos;
+using TB.Application.Auth.DTOs;
+using TB.Application.Common.Interfaces;
 namespace TB.Application.Auth.commands.Register;
 
 public sealed class RegisterCommandHandler

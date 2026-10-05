@@ -1,5 +1,4 @@
-namespace TB.Application.Auth.Dtos;
-
+namespace TB.Application.Auth.DTOs;
 
 public sealed record AuthResponse(
     string AccessToken,

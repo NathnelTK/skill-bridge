@@ -1,10 +1,10 @@
-using TB.Application.Auth;
-using TB.Domain.Entities;
+using TB.Application.Auth.DTOs;
+
 namespace TB.Application.Common.Interfaces;
 
 public interface IAuthService
 {
-    Task<User> RegisterAsync(
+    Task<AuthResponse> RegisterAsync(
         string email,
         string password,
         string fullName,

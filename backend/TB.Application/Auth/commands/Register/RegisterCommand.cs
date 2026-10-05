@@ -1,5 +1,5 @@
 using MediatR;
-using TB.Application.Auth;
+using TB.Application.Auth.DTOs;
 namespace TB.Application.Auth.commands.Register;
 
 public sealed record RegisterCommand(

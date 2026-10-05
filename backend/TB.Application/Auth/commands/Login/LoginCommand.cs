@@ -1,4 +1,5 @@
 using MediatR;
+using TB.Application.Auth.DTOs;
 
 namespace TB.Application.Auth.commands.Login;
 
