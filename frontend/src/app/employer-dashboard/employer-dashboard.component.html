@@ -1,0 +1,117 @@
+<div class="dashboard-shell">
+  <aside class="sidebar">
+    <div class="brand-row">
+      <span class="brand-mark">S</span>
+      <span class="brand-name">SkillBridge</span>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Employer navigation">
+      <button type="button" [class.active]="activeSection === 'Dashboard'" (click)="setSection('Dashboard')"><span aria-hidden="true">D</span>Dashboard</button>
+      <button type="button" [class.active]="activeSection === 'Jobs'" (click)="setSection('Jobs')"><span aria-hidden="true">J</span>Jobs</button>
+      <button type="button" [class.active]="activeSection === 'Applications'" (click)="setSection('Applications')"><span aria-hidden="true">A</span>Applications</button>
+      <button type="button" [class.active]="activeSection === 'Profile'" (click)="setSection('Profile')"><span aria-hidden="true">P</span>Profile</button>
+    </nav>
+
+    <button class="logout-button" type="button" (click)="logout()"><span aria-hidden="true">↪</span>Logout</button>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1>{{ activeSection === 'Dashboard' ? 'Welcome, ' + companyName : activeSection }}</h1>
+        <p>{{ activeSection === 'Dashboard' ? 'Manage your jobs and find the best talent.' : 'Manage your company hiring workspace.' }}</p>
+      </div>
+      <button class="company-menu" type="button" (click)="setSection('Profile')" aria-label="Open company profile">
+        <span class="company-avatar">{{ companyName.charAt(0).toUpperCase() }}</span>
+        <span class="company-menu-copy"><strong>{{ companyName }}</strong><small>{{ contactName }}</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </button>
+    </header>
+
+    @if (activeSection === 'Dashboard') {
+      <section class="stats-grid" aria-label="Hiring statistics">
+        @for (stat of stats; track stat.label) {
+          <article class="stat-card" [class]="'stat-card ' + stat.accent">
+            <div class="stat-heading"><span>{{ stat.label }}</span><span class="stat-icon" aria-hidden="true">{{ stat.label === 'Today' ? '+' : stat.label === 'Total Applications' ? 'A' : stat.label === 'Shortlisted' ? '✓' : '×' }}</span></div>
+            <strong>{{ stat.value }}</strong>
+          </article>
+        }
+      </section>
+
+      <section class="table-section">
+        <div class="section-heading">
+          <div>
+            <h2>Recent Applications</h2>
+            <p>Review candidates who recently applied to your roles.</p>
+          </div>
+          <button type="button" class="view-all" (click)="setSection('Applications')">View All</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Candidate</th><th>Position</th><th>Match %</th><th>Status</th><th>Applied On</th></tr>
+            </thead>
+            <tbody>
+              @for (application of applications; track application.candidate) {
+                <tr>
+                  <td><div class="candidate-cell"><span class="candidate-avatar">{{ application.initials }}</span><strong>{{ application.candidate }}</strong></div></td>
+                  <td>{{ application.position }}</td>
+                  <td><div class="match-cell"><span>{{ application.match }}%</span><span class="match-track"><span [style.width.%]="application.match"></span></span></div></td>
+                  <td><span class="status" [class]="'status ' + application.status.toLowerCase()">{{ application.status }}</span></td>
+                  <td>{{ application.date }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (activeSection === 'Applications') {
+      <section class="table-section standalone-section">
+        <div class="section-heading"><div><h2>Applications</h2><p>Review candidate matches and application status.</p></div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Candidate</th><th>Position</th><th>Match %</th><th>Status</th><th>Applied On</th></tr></thead>
+            <tbody>
+              @for (application of applications; track application.candidate) {
+                <tr>
+                  <td><div class="candidate-cell"><span class="candidate-avatar">{{ application.initials }}</span><strong>{{ application.candidate }}</strong></div></td>
+                  <td>{{ application.position }}</td>
+                  <td><div class="match-cell"><span>{{ application.match }}%</span><span class="match-track"><span [style.width.%]="application.match"></span></span></div></td>
+                  <td><span class="status" [class]="'status ' + application.status.toLowerCase()">{{ application.status }}</span></td>
+                  <td>{{ application.date }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (activeSection === 'Jobs') {
+      <section class="table-section standalone-section">
+        <div class="section-heading"><div><h2>Your Jobs</h2><p>Review job listings and candidate activity.</p></div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Position</th><th>Department</th><th>Applications</th><th>Status</th></tr></thead>
+            <tbody>
+              @for (job of jobs; track job.title) {
+                <tr><td><strong>{{ job.title }}</strong></td><td>{{ job.department }}</td><td>{{ job.applications }}</td><td><span class="status" [class]="'status ' + job.status.toLowerCase()">{{ job.status }}</span></td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (activeSection === 'Profile') {
+      <section class="profile-section">
+        <span class="profile-avatar">{{ companyName.charAt(0).toUpperCase() }}</span>
+        <div><span class="profile-label">Company</span><h2>{{ companyName }}</h2></div>
+        <div><span class="profile-label">Account contact</span><h2>{{ contactName }}</h2></div>
+      </section>
+    }
+  </main>
+</div>

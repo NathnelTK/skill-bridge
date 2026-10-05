@@ -1,0 +1,52 @@
+<div class="page-shell">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>Create an Employer Account</h1>
+      <p>Connect your company with skilled candidates and manage your hiring journey.</p>
+    </div>
+
+    <form class="register-form" (ngSubmit)="submit()">
+      <label>
+        <span>Company Name</span>
+        <input type="text" [(ngModel)]="companyName" name="companyName" placeholder="Enter your company name" required />
+      </label>
+
+      <label>
+        <span>Your Name</span>
+        <input type="text" [(ngModel)]="fullName" name="fullName" placeholder="Enter your full name" required />
+      </label>
+
+      <label>
+        <span>Email</span>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="you@company.com" required />
+      </label>
+
+      <label>
+        <span>Password</span>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Create a password" required />
+      </label>
+
+      <label>
+        <span>Confirm Password</span>
+        <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required />
+      </label>
+
+      @if (errorMessage) {
+        <p class="form-error" role="alert">{{ errorMessage }}</p>
+      }
+
+      <button type="submit" class="primary-btn">Create Employer Account</button>
+    </form>
+
+    <p class="signin-text">Already have an account? <a routerLink="/employer-login">Login</a></p>
+  </div>
+
+  <aside class="promo-panel" aria-label="Employer benefits">
+    <div class="avatar">S</div>
+    <ul>
+      <li>Reach candidates with relevant skills.</li>
+      <li>Build your hiring profile.</li>
+      <li>Connect with growing talent.</li>
+    </ul>
+  </aside>
+</div>

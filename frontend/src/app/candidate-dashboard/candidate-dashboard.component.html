@@ -1,0 +1,161 @@
+<div class="dashboard-shell">
+  <aside class="sidebar">
+    <div class="brand-row">
+      <div class="brand-mark">S</div>
+      <div class="brand-copy">
+        <span>SkillBridge</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item" [class.active]="activeSection === 'Dashboard'" (click)="activeSection = 'Dashboard'">Dashboard</button>
+      <button class="nav-item" [class.active]="activeSection === 'Jobs'" (click)="activeSection = 'Jobs'">Jobs</button>
+      <button class="nav-item" [class.active]="activeSection === 'My Applications'" (click)="activeSection = 'My Applications'">My Applications</button>
+      <button class="nav-item" [class.active]="activeSection === 'Profile'" (click)="activeSection = 'Profile'">Profile</button>
+      <button class="nav-item logout" (click)="logout()">Logout</button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    @if (activeSection === 'Dashboard' || activeSection === 'Jobs') {
+      <header class="topbar">
+        <div>
+          <h1>{{ activeSection === 'Dashboard' ? 'Welcome, ' + candidateName : 'Find your next opportunity' }}</h1>
+          <p>{{ activeSection === 'Dashboard' ? 'Here are opportunities picked for you.' : 'Explore roles that match your skills.' }}</p>
+        </div>
+      </header>
+
+      @if (activeSection === 'Dashboard') {
+        <section class="stats">
+          @for (stat of stats; track stat.label) {
+            <div class="stat-card">
+              <span class="value">{{ stat.label === 'Applied' ? applications.length : stat.value }}</span>
+              <span class="label">{{ stat.label }}</span>
+            </div>
+          }
+        </section>
+      }
+
+      <section class="jobs-panel">
+        <div class="panel-header">
+          <input class="search-box" type="search" placeholder="Search jobs by title or skill..." [value]="searchTerm" (input)="setSearchTerm($event)" />
+          <button class="filter-btn" type="button" [attr.aria-expanded]="filtersOpen" (click)="filtersOpen = !filtersOpen">Filter</button>
+        </div>
+
+        @if (filtersOpen) {
+          <div class="filter-options">
+            <label for="job-type">Job type</label>
+            <select id="job-type" [value]="selectedJobType" (change)="setJobType($event)">
+              <option>All types</option>
+              <option>Full-time</option>
+              <option>Part-time</option>
+            </select>
+          </div>
+        }
+
+        <div class="jobs-header">
+          <h2>{{ activeSection === 'Dashboard' ? 'Recommended Jobs' : 'Available Jobs' }}</h2>
+          @if (activeSection === 'Dashboard') {
+            <button class="text-action" type="button" (click)="activeSection = 'Jobs'">View All</button>
+          }
+        </div>
+
+        <div class="job-list">
+          @for (job of filteredJobs; track job.title) {
+            <article class="job-card">
+              <div class="job-brand"></div>
+              <div class="job-info">
+                <h3>{{ job.title }}</h3>
+                <p>{{ job.company }} · {{ job.location }} · {{ job.type }}</p>
+                <div class="tags">
+                  @for (skill of job.skills; track skill) {
+                    <span>{{ skill }}</span>
+                  }
+                </div>
+              </div>
+              <button type="button" [disabled]="applications.some(application => application.title === job.title)" (click)="applyToJob(job)">
+                {{ applications.some(application => application.title === job.title) ? 'Applied' : job.action }}
+              </button>
+            </article>
+          } @empty {
+            <p class="empty-state">No jobs match your search. Try changing your search or filter.</p>
+          }
+        </div>
+      </section>
+    }
+
+    @if (activeSection === 'My Applications') {
+      <header class="topbar">
+        <div>
+          <h1>My Applications</h1>
+          <p>Keep track of the roles you have applied for.</p>
+        </div>
+      </header>
+      <section class="jobs-panel">
+        @if (applications.length) {
+          <div class="application-list">
+            @for (application of applications; track application.title) {
+              <article class="application-row">
+                <div>
+                  <h2>{{ application.title }}</h2>
+                  <p>{{ application.company }}</p>
+                </div>
+                <span class="application-status">{{ application.status }}</span>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="empty-state">You have not applied to any jobs yet.</p>
+        }
+      </section>
+    }
+
+    @if (activeSection === 'Profile') {
+      <header class="topbar">
+        <div>
+          <h1>Your Profile</h1>
+          <p>Your candidate account details.</p>
+        </div>
+      </header>
+
+      @if (editingProfile) {
+        <form class="profile-form" (submit)="saveProfile($event)">
+          <label>
+            <span>Candidate skills</span>
+            <textarea rows="3" [value]="skillsInput" (input)="updateSkills($event)" placeholder="Angular, communication, project management"></textarea>
+          </label>
+          <label>
+            <span>Resume or CV</span>
+            <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="selectResume($event)" />
+          </label>
+          <p class="file-note">{{ pendingResumeFileName || profile.resumeFileName || 'No resume selected' }}</p>
+          <div class="profile-actions">
+            <button class="profile-save" type="submit">Save Profile</button>
+            <button class="profile-cancel" type="button" (click)="cancelProfileEdit()">Cancel</button>
+          </div>
+        </form>
+      } @else {
+        <section class="profile-panel">
+          <div class="profile-avatar">{{ candidateName.charAt(0).toUpperCase() }}</div>
+          <div class="profile-details">
+            <span class="label">Full name</span>
+            <h2>{{ candidateName }}</h2>
+            <span class="label profile-label">Candidate skills</span>
+            @if (profile.skills.length) {
+              <div class="tags profile-skills">
+                @for (skill of profile.skills; track skill) {
+                  <span>{{ skill }}</span>
+                }
+              </div>
+            } @else {
+              <p class="profile-muted">No skills added yet.</p>
+            }
+            <span class="label profile-label">Resume or CV</span>
+            <p class="profile-muted">{{ profile.resumeFileName || 'No resume added yet.' }}</p>
+          </div>
+          <button class="profile-edit" type="button" (click)="startProfileEdit()">Update Profile</button>
+        </section>
+      }
+    }
+  </main>
+</div>

@@ -1,0 +1,31 @@
+<div class="auth-shell">
+  <div class="brand-row">
+    <div class="brand-mark">S</div>
+    <div class="brand-copy">
+      <span class="brand-name">SkillBridge</span>
+      <small>Connect. Grow. Build Your Future.</small>
+    </div>
+  </div>
+
+  <div class="login-card">
+    <h1>Employer Login</h1>
+    <p class="subtitle">Login to your company account</p>
+
+    <form class="login-form" (ngSubmit)="submit()">
+      <label>
+        <span>Email</span>
+        <input type="email" name="email" [(ngModel)]="email" placeholder="you@company.com" required />
+      </label>
+
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" [(ngModel)]="password" placeholder="Enter your password" required />
+      </label>
+
+      <button type="submit" class="primary-btn" [disabled]="!email.trim() || !password.trim()">Login</button>
+    </form>
+
+    <p class="signup-text">New to SkillBridge? <a routerLink="/employer-registration">Create an employer account</a></p>
+    <p class="signup-text"><a routerLink="/login">Candidate login</a></p>
+  </div>
+</div>

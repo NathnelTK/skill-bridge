@@ -5,10 +5,10 @@
       <p>As a candidate, you can find and apply for jobs, track your applications and build your career.</p>
     </div>
 
-    <form class="register-form">
+    <form class="register-form" (ngSubmit)="submit()">
       <label>
         <span>Full Name</span>
-        <input type="text" placeholder="Enter your full name" />
+        <input type="text" [(ngModel)]="fullName" name="fullName" placeholder="Enter your full name" />
       </label>
 
       <label>
