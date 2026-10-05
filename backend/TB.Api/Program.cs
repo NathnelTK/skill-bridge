@@ -2,7 +2,7 @@ using DotNetEnv;
 using TB.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-var envFile = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", ".env"));
+var envFile = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "..", ".env"));
 
 if (File.Exists(envFile))
 {

@@ -4,7 +4,7 @@ A candidate–job matching MVP: employers post jobs, candidates browse and apply
 
 ## Repository layout
 
-- `backend/SkillBridge.sln` — solution that builds the existing root-level Onion Architecture projects (`TB.Api`, `TB.Application`, `TB.Domain`, `TB.Infrastructure`) without duplicating them.
+- `backend/SkillBridge.sln` — .NET solution containing the Onion Architecture projects (`TB.Api`, `TB.Application`, `TB.Domain`, `TB.Infrastructure`).
 - `frontend/` — Angular standalone application.
 - `frontend/public/wireframes/` — static wireframes for the six initial workflows.
 - `plan.md` — scope, delivery rules, and acceptance criteria.
@@ -21,24 +21,30 @@ Requirements: .NET 10 SDK, PostgreSQL, and the `dotnet-ef` 10 CLI tool.
    dotnet build backend/SkillBridge.sln
    ```
 
-3. Apply the initial schema and seed data:
+3. Apply the initial schema and seed data from the repository root:
 
    ```sh
-   dotnet ef database update --project TB.Infrastructure --startup-project TB.Api
+   dotnet ef database update --project backend/TB.Infrastructure --startup-project backend/TB.Api
+   ```
+
+   Or, from `backend/TB.Infrastructure`, run the short form:
+
+   ```sh
+   dotnet ef database update
    ```
 
 4. Start the API:
 
    ```sh
-   dotnet run --project TB.Api
+   dotnet run --project backend/TB.Api
    ```
 
-The API exposes `GET /health`. The EF Core model has six tables: `users`, `skills`, `candidate_skills`, `jobs`, `job_skills`, and `applications`. The initial migration seeds one employer, one candidate, eight skills, three jobs, and the corresponding candidate/job skill links. Demo user rows deliberately have a disabled seed-only password marker; authentication is not implemented by this schema/bootstrap slice.
+The API exposes `GET /health`. The EF Core model has six tables: `users`, `skills`, `candidate_skills`, `jobs`, `job_skills`, and `applications`. Roles and application statuses are represented by domain enums and stored as readable strings. Applications have a unique job/candidate constraint and only allow the `Received` → `Shortlisted` or `Rejected` transitions. The initial migration seeds one employer, one candidate, eight skills, three jobs, and the corresponding candidate/job skill links. Demo user rows deliberately have a disabled seed-only password marker; authentication is not implemented by this phase.
 
 To regenerate the migration after an intentional model change:
 
 ```sh
-dotnet ef migrations add <MigrationName> --project TB.Infrastructure --startup-project TB.Api
+dotnet ef migrations add <MigrationName> --project backend/TB.Infrastructure --startup-project backend/TB.Api
 ```
 
 ## Frontend setup
@@ -69,4 +75,4 @@ For a smaller team, Backend and Database / Full-stack may be assigned to one per
 
 ## Current scope boundaries
 
-This bootstrap establishes the projects, initial schema, deterministic sample data, and wireframes. Authentication, job/application endpoints, real login credentials, and production deployment are follow-up implementation work.
+Phase 1 establishes the projects, domain entities, initial schema, deterministic sample data, and wireframes. Authentication, job/application endpoints, server-side match calculation, real login credentials, and production deployment are follow-up implementation work.

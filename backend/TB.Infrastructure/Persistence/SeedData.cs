@@ -1,4 +1,5 @@
 using TB.Domain.Entities;
+using TB.Domain.Enums;
 
 namespace TB.Infrastructure.Persistence;
 
@@ -27,7 +28,7 @@ internal static class SeedData
             Id = EmployerId,
             Email = "employer@skillbridge.demo",
             PasswordHash = "!seed-only-account!",
-            Role = "Employer",
+            Role = UserRole.Employer,
             FullName = "Alex Morgan",
             CompanyName = "Northstar Labs",
             Location = "Addis Ababa",
@@ -38,7 +39,7 @@ internal static class SeedData
             Id = CandidateId,
             Email = "candidate@skillbridge.demo",
             PasswordHash = "!seed-only-account!",
-            Role = "Candidate",
+            Role = UserRole.Candidate,
             FullName = "Sam Taylor",
             Location = "Addis Ababa",
             CreatedAtUtc = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)

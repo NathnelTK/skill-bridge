@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Domain", "..\TB.Domain\TB.Domain.csproj", "{39407BB3-5EDB-4214-9B3F-E27D3AD26E84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Domain", "TB.Domain\TB.Domain.csproj", "{39407BB3-5EDB-4214-9B3F-E27D3AD26E84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Application", "..\TB.Application\TB.Application.csproj", "{720BEA90-965B-4BAE-8AFB-3DA88D3675D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Application", "TB.Application\TB.Application.csproj", "{720BEA90-965B-4BAE-8AFB-3DA88D3675D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Infrastructure", "..\TB.Infrastructure\TB.Infrastructure.csproj", "{44DF5164-C28C-4C26-8FDB-F1C556404E4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Infrastructure", "TB.Infrastructure\TB.Infrastructure.csproj", "{44DF5164-C28C-4C26-8FDB-F1C556404E4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Api", "..\TB.Api\TB.Api.csproj", "{D2A9008C-8375-4FA2-A691-54A828048FA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Api", "TB.Api\TB.Api.csproj", "{D2A9008C-8375-4FA2-A691-54A828048FA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

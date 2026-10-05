@@ -9,4 +9,7 @@ public sealed class Job
     public string Description { get; set; } = string.Empty;
     public string Location { get; set; } = string.Empty;
     public DateTime CreatedAtUtc { get; set; }
+
+    public ICollection<JobSkill> RequiredSkills { get; } = new List<JobSkill>();
+    public ICollection<Application> Applications { get; } = new List<Application>();
 }
