@@ -7,6 +7,10 @@ public sealed class Job
     public User Employer { get; set; } = null!;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public DateTime CreatedAtUtc { get; set; }
+    public string? Location { get; set; }
+    public string JobType { get; set; } = "Full-time";
+    public bool IsActive { get; set; } = true;
+    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+
+    public ICollection<JobSkill> JobSkills { get; set; } = [];
 }

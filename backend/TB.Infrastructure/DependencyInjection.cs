@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TB.Application.Features.Applicants;
 using TB.Infrastructure.Persistence;
-
+using TB.Application.Features.Jobs;
 namespace TB.Infrastructure;
 
 public static class DependencyInjection
@@ -26,7 +26,7 @@ public static class DependencyInjection
 
         services.AddScoped<ICandidateProfileService,
             Services.CandidateProfileService>();
-
+        services.AddScoped<IJobService, Services.JobService>();
         return services;
     }
 }
