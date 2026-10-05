@@ -10,7 +10,9 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<CandidateSkill> CandidateSkills => Set<CandidateSkill>();
     public DbSet<Job> Jobs => Set<Job>();
     public DbSet<JobSkill> JobSkills => Set<JobSkill>();
-    public DbSet<Application> Applications => Set<Application>();
+
+    public DbSet<TB.Domain.Entities.Application> Applications =>
+        Set<TB.Domain.Entities.Application>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,15 +42,19 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         modelBuilder.Entity<CandidateSkill>(entity =>
         {
             entity.ToTable("candidate_skills");
-            entity.HasKey(candidateSkill => new { candidateSkill.CandidateId, candidateSkill.SkillId });
+            entity.HasKey(candidateSkill =>
+                new { candidateSkill.CandidateId, candidateSkill.SkillId });
+
             entity.HasOne(candidateSkill => candidateSkill.Candidate)
                 .WithMany()
                 .HasForeignKey(candidateSkill => candidateSkill.CandidateId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             entity.HasOne(candidateSkill => candidateSkill.Skill)
                 .WithMany()
                 .HasForeignKey(candidateSkill => candidateSkill.SkillId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             entity.HasData(SeedData.CandidateSkills);
         });
 
@@ -59,38 +65,51 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
             entity.Property(job => job.Title).HasMaxLength(200).IsRequired();
             entity.Property(job => job.Description).IsRequired();
             entity.Property(job => job.Location).HasMaxLength(160).IsRequired();
+
             entity.HasOne(job => job.Employer)
                 .WithMany()
                 .HasForeignKey(job => job.EmployerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             entity.HasData(SeedData.Jobs);
         });
 
         modelBuilder.Entity<JobSkill>(entity =>
         {
             entity.ToTable("job_skills");
-            entity.HasKey(jobSkill => new { jobSkill.JobId, jobSkill.SkillId });
+            entity.HasKey(jobSkill =>
+                new { jobSkill.JobId, jobSkill.SkillId });
+
             entity.HasOne(jobSkill => jobSkill.Job)
                 .WithMany()
                 .HasForeignKey(jobSkill => jobSkill.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             entity.HasOne(jobSkill => jobSkill.Skill)
                 .WithMany()
                 .HasForeignKey(jobSkill => jobSkill.SkillId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             entity.HasData(SeedData.JobSkills);
         });
 
-        modelBuilder.Entity<Application>(entity =>
+        modelBuilder.Entity<TB.Domain.Entities.Application>(entity =>
         {
             entity.ToTable("applications");
             entity.HasKey(application => application.Id);
-            entity.Property(application => application.Status).HasMaxLength(32).IsRequired();
-            entity.HasIndex(application => new { application.JobId, application.CandidateId }).IsUnique();
+            entity.Property(application => application.Status)
+                .HasMaxLength(32)
+                .IsRequired();
+
+            entity.HasIndex(application =>
+                new { application.JobId, application.CandidateId })
+                .IsUnique();
+
             entity.HasOne(application => application.Job)
                 .WithMany()
                 .HasForeignKey(application => application.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             entity.HasOne(application => application.Candidate)
                 .WithMany()
                 .HasForeignKey(application => application.CandidateId)
