@@ -49,7 +49,7 @@ export class CandidateDashboardComponent implements OnInit {
   error: string | null = null;
 
   ngOnInit(): void {
-    this.loadProfile();
+    this.loadDashboard();
   }
 
   get firstName(): string {
@@ -108,10 +108,13 @@ export class CandidateDashboardComponent implements OnInit {
       jobs: this.jobsService.browse(),
     }).subscribe({
       next: ({ profile, applications, jobs }) => {
-        this.profile = profile;
-        this.applications = applications;
-        this.jobs = jobs;
-        this.appliedJobIds = new Set(applications.map((application) => application.jobId));
+        this.profile = { ...profile, skills: profile.skills ?? [] };
+        this.applications = applications ?? [];
+        this.jobs = (jobs ?? []).map((job) => ({
+          ...job,
+          requiredSkills: job.requiredSkills ?? [],
+        }));
+        this.appliedJobIds = new Set(this.applications.map((application) => application.jobId));
         this.loading = false;
         this.changeDetector.markForCheck();
       },

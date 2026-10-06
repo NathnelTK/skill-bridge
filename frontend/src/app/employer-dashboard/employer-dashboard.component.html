@@ -1,30 +1,164 @@
-<div class="employer-dashboard">
-  <div class="header">
-    <h1>Employer Dashboard</h1>
-    <a routerLink="/jobs/create" class="btn btn-primary">Post New Job</a>
-  </div>
+<div class="dashboard-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/" aria-label="SkillBridge home">
+      <span class="brand-mark">S</span>
+      <span class="brand-name">skill<span>bridge</span></span>
+    </a>
 
-  <div *ngIf="loading" class="loading">Loading jobs...</div>
+    <nav class="top-nav" aria-label="Employer navigation">
+      <a mat-button class="nav-link active" routerLink="/employer/dashboard">Dashboard</a>
+      <a mat-button class="nav-link" routerLink="/jobs">Browse jobs</a>
+    </nav>
 
-  <div *ngIf="error" class="error">{{ error }}</div>
-
-  <div *ngIf="!loading && !error && jobs.length === 0" class="empty-state">
-    <p>You haven't posted any jobs yet.</p>
-    <a routerLink="/jobs/create" class="btn btn-primary">Post Your First Job</a>
-  </div>
-
-  <div *ngIf="!loading && !error && jobs.length > 0" class="jobs-list">
-    <div class="job-card" *ngFor="let job of jobs">
-      <h3>{{ job.title }}</h3>
-      <p class="location">{{ job.location }}</p>
-      <p class="company">{{ job.companyName }}</p>
-      <p class="skills">
-        <span *ngFor="let skill of job.requiredSkills" class="skill-tag">{{ skill.name }}</span>
-      </p>
-      <div class="actions">
-        <a [routerLink]="['/employer/jobs', job.id, 'applicants']" class="btn btn-secondary">View Applicants</a>
-        <a [routerLink]="['/jobs', job.id, 'edit']" class="btn btn-secondary">Edit Job</a>
-      </div>
+    <div class="account-actions">
+      <button
+        mat-icon-button
+        class="logout-button"
+        type="button"
+        aria-label="Log out"
+        (click)="logout()"
+      >
+        <span aria-hidden="true">↗</span>
+      </button>
     </div>
-  </div>
+  </header>
+
+  <main class="dashboard-content">
+    <section class="welcome-row">
+      <div>
+        <p class="eyebrow">EMPLOYER WORKSPACE</p>
+        <h1>{{ companyName }}<span class="accent-dot">.</span></h1>
+        <p class="welcome-copy">Manage your roles and find the right people for your team.</p>
+      </div>
+      <a mat-flat-button class="primary-button" routerLink="/jobs/create">
+        <span aria-hidden="true">＋</span>
+        Post a job
+      </a>
+    </section>
+
+    <div *ngIf="loading" class="loading-state" role="status">
+      <mat-spinner diameter="34" aria-label="Loading employer dashboard"></mat-spinner>
+      <span>Loading your job listings…</span>
+    </div>
+
+    <mat-card *ngIf="error" appearance="outlined" class="message-card error-card" role="alert">
+      <mat-card-content>
+        <span class="message-mark error-mark" aria-hidden="true">!</span>
+        <div class="message-copy">
+          <h2>We couldn’t load your jobs</h2>
+          <p>{{ error }}</p>
+        </div>
+        <button mat-stroked-button type="button" (click)="loadJobs()">Try again</button>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-container *ngIf="!loading && !error">
+      <section class="stats-grid" aria-label="Hiring overview">
+        <mat-card appearance="outlined" class="stat-card stat-roles">
+          <mat-card-content>
+            <span class="stat-icon" aria-hidden="true">▤</span>
+            <span class="stat-label">Posted roles</span>
+            <strong class="stat-value">{{ jobs.length }}</strong>
+            <span class="stat-caption">Opportunities listed by your company</span>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="stat-card stat-locations">
+          <mat-card-content>
+            <span class="stat-icon" aria-hidden="true">⌖</span>
+            <span class="stat-label">Locations</span>
+            <strong class="stat-value">{{ locationCount }}</strong>
+            <span class="stat-caption">Places where you’re hiring</span>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="stat-card stat-skills">
+          <mat-card-content>
+            <span class="stat-icon" aria-hidden="true">✦</span>
+            <span class="stat-label">Skills sought</span>
+            <strong class="stat-value">{{ skillCount }}</strong>
+            <span class="stat-caption">Distinct skills across your roles</span>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
+      <section class="listings-section" aria-labelledby="listings-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YOUR HIRING PIPELINE</p>
+            <h2 id="listings-title">Job listings</h2>
+            <p class="section-copy">Keep your roles up to date and review interested candidates.</p>
+          </div>
+          <a mat-button class="text-link" routerLink="/jobs/create">
+            Create another <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div *ngIf="jobs.length; else noJobs" class="jobs-grid">
+          <mat-card
+            *ngFor="let job of jobs; let index = index"
+            appearance="outlined"
+            class="job-card"
+            [class.job-card-featured]="index === 0"
+          >
+            <mat-card-content>
+              <div class="job-card-top">
+                <div class="role-avatar" [attr.data-tone]="index % 4" aria-hidden="true">
+                  {{ job.title.trim().charAt(0).toLocaleUpperCase() || 'J' }}
+                </div>
+                <mat-chip class="status-chip">Live</mat-chip>
+                <span class="job-date">{{ job.createdAtUtc | date: 'MMM d' }}</span>
+              </div>
+
+              <p class="job-company">{{ job.companyName }}</p>
+              <h3>{{ job.title }}</h3>
+              <p class="job-location"><span aria-hidden="true">⌖</span> {{ job.location }}</p>
+
+              <mat-chip-set class="job-skills" aria-label="Required skills">
+                <mat-chip *ngFor="let skill of job.requiredSkills.slice(0, 4)">
+                  {{ skill.name }}
+                </mat-chip>
+                <mat-chip *ngIf="job.requiredSkills.length > 4">
+                  +{{ job.requiredSkills.length - 4 }}
+                </mat-chip>
+                <span *ngIf="!job.requiredSkills.length" class="no-skills">
+                  No specific skills listed
+                </span>
+              </mat-chip-set>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <a
+                mat-stroked-button
+                class="secondary-button"
+                [routerLink]="['/jobs', job.id, 'edit']"
+              >
+                Edit role
+              </a>
+              <a
+                mat-flat-button
+                class="primary-button"
+                [routerLink]="['/employer/jobs', job.id, 'applicants']"
+              >
+                View applicants
+              </a>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+
+        <ng-template #noJobs>
+          <mat-card appearance="outlined" class="message-card empty-card">
+            <mat-card-content>
+              <span class="message-mark empty-mark" aria-hidden="true">＋</span>
+              <div class="message-copy">
+                <h2>Your next great hire starts with a job post.</h2>
+                <p>Create a listing to introduce your opportunity to candidates.</p>
+              </div>
+              <a mat-flat-button class="primary-button" routerLink="/jobs/create">Post your first job</a>
+            </mat-card-content>
+          </mat-card>
+        </ng-template>
+      </section>
+    </ng-container>
+  </main>
 </div>

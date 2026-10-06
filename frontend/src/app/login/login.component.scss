@@ -11,8 +11,8 @@
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 560px);
+  justify-content: center;
   align-items: center;
   padding: 3rem 2rem;
 }
@@ -192,54 +192,9 @@
   font-size: 0.9rem;
 }
 
-.promo-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1.2rem;
-  padding: 2rem 1.4rem;
-}
-
-.avatar {
-  width: 88px;
-  height: 88px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #7a4dff, #a85ef7);
-  font-size: 2.2rem;
-  box-shadow: 0 20px 40px rgba(122, 77, 255, 0.35);
-}
-
-.promo-panel ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.8rem;
-  color: #dfe5ff;
-  max-width: 24rem;
-}
-
-.promo-panel li {
-  position: relative;
-  padding-left: 1.5rem;
-  text-align: left;
-}
-
-.promo-panel li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: #8b7cff;
-  font-weight: 700;
-}
-
 @media (max-width: 900px) {
   .page-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 560px);
     padding: 2rem 1rem;
   }
 
