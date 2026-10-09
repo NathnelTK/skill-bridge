@@ -1,5 +1,6 @@
 using TB.Domain.Entities;
 using TB.Domain.Enums;
+using ApplicationEntity = TB.Domain.Entities.Application;
 
 namespace TB.Infrastructure.Persistence;
 
@@ -27,6 +28,9 @@ internal static class SeedData
     public static readonly Guid DevOpsJobId = Guid.Parse("30000000-0000-0000-0000-000000000004");
     public static readonly Guid DataEngineerJobId = Guid.Parse("30000000-0000-0000-0000-000000000005");
     public static readonly Guid ApiDeveloperJobId = Guid.Parse("30000000-0000-0000-0000-000000000006");
+
+    public static readonly Guid FullStackApplicationId = Guid.Parse("40000000-0000-0000-0000-000000000001");
+    public static readonly Guid BackendApplicationId = Guid.Parse("40000000-0000-0000-0000-000000000002");
 
     public static readonly User[] Users =
     [
@@ -153,4 +157,46 @@ internal static class SeedData
         new() { JobId = ApiDeveloperJobId, SkillId = RestSkillId },
         new() { JobId = ApiDeveloperJobId, SkillId = PostgresSkillId }
     ];
+
+    // Seeds the candidate-reviewed demo state: Sam Taylor applied to the Full-Stack role
+    // (still Received) and to the Backend role (already Shortlisted). Both are built through
+    // the domain factory so the Application status invariant is respected at seed time.
+    public static readonly ApplicationEntity[] Applications =
+    [
+        CreateApplication(
+            FullStackApplicationId,
+            FullStackJobId,
+            CandidateId,
+            new DateTime(2026, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+            ApplicationStatus.Received),
+        CreateApplication(
+            BackendApplicationId,
+            BackendJobId,
+            CandidateId,
+            new DateTime(2026, 1, 7, 0, 0, 0, DateTimeKind.Utc),
+            ApplicationStatus.Shortlisted)
+    ];
+
+    private static ApplicationEntity CreateApplication(
+        Guid id,
+        Guid jobId,
+        Guid candidateId,
+        DateTime appliedAtUtc,
+        ApplicationStatus status)
+    {
+        var application = new ApplicationEntity
+        {
+            Id = id,
+            JobId = jobId,
+            CandidateId = candidateId,
+            AppliedAtUtc = appliedAtUtc
+        };
+
+        if (status != ApplicationStatus.Received)
+        {
+            application.SetStatus(status);
+        }
+
+        return application;
+    }
 }

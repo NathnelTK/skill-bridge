@@ -85,7 +85,7 @@ export class LoginComponent {
       )
       .subscribe({
         next: (response) => {
-          this.authService.saveToken(response.token);
+          this.authService.saveSession(response);
           this.successMessage = 'Login successful! Redirecting...';
           this.changeDetector.markForCheck();
 

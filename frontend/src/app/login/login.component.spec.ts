@@ -20,6 +20,7 @@ describe('LoginComponent', () => {
     loginError = undefined;
     loginResponse = {
       token: 'test-token',
+      expiresAtUtc: '2026-01-01T00:00:00Z',
       user: {
         id: 'user-id',
         fullName: 'Test User',
@@ -34,8 +35,8 @@ describe('LoginComponent', () => {
           provide: AuthService,
           useValue: {
             login: () => (loginError ? throwError(() => loginError) : of(loginResponse)),
-            saveToken: (token: string) => {
-              savedToken = token;
+            saveSession: (response: AuthResponse) => {
+              savedToken = response.token;
             },
           },
         },

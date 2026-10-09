@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 
@@ -16,18 +16,6 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    fullName: string;
-    email: string;
-    role: string;
-    companyName?: string;
-    location?: string;
-  };
-}
-
 export interface UserDto {
   id: string;
   fullName: string;
@@ -37,10 +25,23 @@ export interface UserDto {
   location?: string;
 }
 
+export interface AuthResponse {
+  token: string;
+  expiresAtUtc: string;
+  user: UserDto;
+}
+
+const TokenKey = 'auth_token';
+const UserKey = 'auth_user';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  private readonly currentUserSignal = signal<UserDto | null>(this.readStoredUser());
+
+  readonly currentUser = this.currentUserSignal.asReadonly();
+
   constructor(private apiService: ApiService) {}
 
   register(request: RegisterRequest): Observable<AuthResponse> {
@@ -55,19 +56,44 @@ export class AuthService {
     return this.apiService.get<UserDto>('/auth/me');
   }
 
-  saveToken(token: string): void {
-    localStorage.setItem('auth_token', token);
+  saveSession(response: AuthResponse): void {
+    localStorage.setItem(TokenKey, response.token);
+    localStorage.setItem(UserKey, JSON.stringify(response.user));
+    this.currentUserSignal.set(response.user);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem(TokenKey);
   }
 
-  logout(): void {
-    localStorage.removeItem('auth_token');
+  getUser(): UserDto | null {
+    return this.currentUserSignal();
+  }
+
+  getRole(): string | null {
+    return this.currentUserSignal()?.role ?? null;
   }
 
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  logout(): void {
+    localStorage.removeItem(TokenKey);
+    localStorage.removeItem(UserKey);
+    this.currentUserSignal.set(null);
+  }
+
+  private readStoredUser(): UserDto | null {
+    const raw = localStorage.getItem(UserKey);
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(raw) as UserDto;
+    } catch {
+      return null;
+    }
   }
 }

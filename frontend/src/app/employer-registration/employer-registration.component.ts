@@ -71,7 +71,7 @@ export class EmployerRegistrationComponent {
 
     this.authService.register(request).subscribe({
       next: (response) => {
-        this.authService.saveToken(response.token);
+          this.authService.saveSession(response);
         this.successMessage = 'Registration successful! Redirecting...';
         this.changeDetector.markForCheck();
         setTimeout(() => {

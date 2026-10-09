@@ -103,6 +103,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
                 .WithMany(job => job.Applications)
                 .HasForeignKey(application => application.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+            entity.HasData(SeedData.Applications);
         });
     }
 }

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,7 @@ export const routes: Routes = [
   },
   {
     path: 'cv-upload',
+    canActivate: [roleGuard('Candidate')],
     loadComponent: () => import('./cv-upload/cv-upload.component').then((m) => m.CvUploadComponent),
   },
   {
@@ -42,6 +44,7 @@ export const routes: Routes = [
   },
   {
     path: 'employer/dashboard',
+    canActivate: [roleGuard('Employer')],
     loadComponent: () =>
       import('./employer-dashboard/employer-dashboard.component').then(
         (m) => m.EmployerDashboardComponent,
@@ -49,19 +52,23 @@ export const routes: Routes = [
   },
   {
     path: 'employer/jobs/:id/applicants',
+    canActivate: [roleGuard('Employer')],
     loadComponent: () =>
       import('./job-applicants/job-applicants.component').then((m) => m.JobApplicantsComponent),
   },
   {
     path: 'jobs/create',
+    canActivate: [roleGuard('Employer')],
     loadComponent: () => import('./job-form/job-form.component').then((m) => m.JobFormComponent),
   },
   {
     path: 'jobs/:id/edit',
+    canActivate: [roleGuard('Employer')],
     loadComponent: () => import('./job-form/job-form.component').then((m) => m.JobFormComponent),
   },
   {
     path: 'candidate/dashboard',
+    canActivate: [roleGuard('Candidate')],
     loadComponent: () =>
       import('./candidate-dashboard/candidate-dashboard.component').then(
         (m) => m.CandidateDashboardComponent,
@@ -69,6 +76,7 @@ export const routes: Routes = [
   },
   {
     path: 'candidate/profile/edit',
+    canActivate: [roleGuard('Candidate')],
     loadComponent: () =>
       import('./candidate-profile-edit/candidate-profile-edit.component').then(
         (m) => m.CandidateProfileEditComponent,
@@ -76,10 +84,12 @@ export const routes: Routes = [
   },
   {
     path: 'candidate/cv-upload',
+    canActivate: [roleGuard('Candidate')],
     loadComponent: () => import('./cv-upload/cv-upload.component').then((m) => m.CvUploadComponent),
   },
   {
     path: 'candidate/applications',
+    canActivate: [roleGuard('Candidate')],
     loadComponent: () =>
       import('./candidate-applications/candidate-applications.component').then(
         (m) => m.CandidateApplicationsComponent,
